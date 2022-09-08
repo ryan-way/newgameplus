@@ -10,14 +10,14 @@ import { AppDataSource } from "./data-source"
 import { User } from "./entity/User"
 
 import express from 'express';
-import * as trpc from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
+import appRouter from './trpc';
+import cors from 'cors';
 
 const serveURL = serve({ directory: "." });
 const port = process.env.PORT || 3000;
 const dev = !app.isPackaged;
 let mainWindow;
-let expressListener;
 
 
 function initializeTypeOrm() {
@@ -41,9 +41,23 @@ function initializeTypeOrm() {
 }
 
 function initializeTrpc() {
-  expressListener = express();
-  expressListener.get('/', (_req, res) => res.send('hello'));
-  expressListener.listen(3001, () => {
+  const app = express();
+
+  app.use((req, res, next) => {
+    console.log('Express', req.method, req.path, req.body ?? req.query);
+
+    next();
+  });
+  app.use(cors());
+  app.use('/trpc',
+    trpcExpress.createExpressMiddleware({
+      router: appRouter,
+    })
+  );
+
+  app.get('/', (_req, res) => res.send('hello'));
+
+  app.listen(3001, () => {
     console.log("Express listening on port 3001");
   })
 }
@@ -70,14 +84,16 @@ function createWindow() {
 			contextIsolation: true,
 			nodeIntegration: true,
 			spellcheck: false,
-			devTools: dev,
-			preload: path.join(__dirname, "preload.cjs")
+			devTools: true,
+			preload: path.join(__dirname, "preload.js")
 		},
 		x: windowState.x,
 		y: windowState.y,
 		width: windowState.width,
 		height: windowState.height,
 	});
+
+  mainWindow.webContents.openDevTools();
 
 	windowState.manage(mainWindow);
 

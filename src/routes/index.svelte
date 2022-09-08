@@ -2,8 +2,28 @@
 	import Counter from '$lib/Counter.svelte';
 	import Logo from '$lib/Logo.svelte';
 	import { browser } from '$app/env';
+  import type { AppRouter } from '../electron/trpc';
+  import { createTRPCClient } from '@trpc/client';
 
 	let desktop: string;
+  let test1: string;
+  let test2: string;
+
+  const client = createTRPCClient<AppRouter>({
+    url: 'http://localhost:3001/trpc',
+  });
+
+  client.query('hello', 'something')
+    .then(res => {
+      console.log("test1 result:", JSON.stringify(res));
+      test1 = res.greet;
+  }).catch(() => console.log("test1 error"));
+
+  client.query('hello', 'something else')
+    .then(res => {
+      console.log("test2 result:", JSON.stringify(res));
+      test2 = res.greet;
+    }).catch(() => console.log("test2 error"));
 
 	if (window.electron && browser) {
 		window.electron.receive('from-main', (data: any) => {
@@ -27,6 +47,17 @@
 		<br />
 		{desktop}
 	{/if}
+  <section>
+    {#if test1}
+      {test1}
+    {/if}
+  </section>
+
+  <section>
+    {#if test2}
+      {test2}
+    {/if}
+  </section>
 </main>
 
 <style>

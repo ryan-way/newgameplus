@@ -9,28 +9,45 @@ import path from 'path';
 import { AppDataSource } from "./data-source"
 import { User } from "./entity/User"
 
+import express from 'express';
+import * as trpc from '@trpc/server';
+import * as trpcExpress from '@trpc/server/adapters/express';
+
 const serveURL = serve({ directory: "." });
 const port = process.env.PORT || 3000;
 const dev = !app.isPackaged;
 let mainWindow;
+let expressListener;
 
-AppDataSource.initialize().then(async () => {
 
-    console.log("Inserting a new user into the database...")
-    const user = new User()
-    user.firstName = "Timber"
-    user.lastName = "Saw"
-    user.age = 25
-    await AppDataSource.manager.save(user)
-    console.log("Saved a new user with id: " + user.id)
+function initializeTypeOrm() {
+  AppDataSource.initialize().then(async () => {
 
-    console.log("Loading users from the database...")
-    const users = await AppDataSource.manager.find(User)
-    console.log("Loaded users: ", users)
+      console.log("Inserting a new user into the database...")
+      const user = new User()
+      user.firstName = "Timber"
+      user.lastName = "Saw"
+      user.age = 25
+      await AppDataSource.manager.save(user)
+      console.log("Saved a new user with id: " + user.id)
 
-    console.log("Here you can setup and run express / fastify / any other framework.")
+      console.log("Loading users from the database...")
+      const users = await AppDataSource.manager.find(User)
+      console.log("Loaded users: ", users)
 
-}).catch(error => console.log(error))
+      console.log("Here you can setup and run express / fastify / any other framework.")
+
+  }).catch(error => console.log(error))
+}
+
+function initializeTrpc() {
+  expressListener = express();
+  expressListener.get('/', (_req, res) => res.send('hello'));
+  expressListener.listen(3001, () => {
+    console.log("Express listening on port 3001");
+  })
+}
+
 
 
 function createWindow() {
@@ -102,6 +119,9 @@ function createMainWindow() {
 
 	if (dev) loadVite(port);
 	else serveURL(mainWindow);
+
+  initializeTypeOrm();
+  initializeTrpc();
 }
 
 app.once('ready', createMainWindow);

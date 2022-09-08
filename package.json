@@ -8,11 +8,8 @@
       "dev": "cross-env NODE_ENV=dev npm run dev:all",
       "dev:all": "concurrently -n=svelte,electron -c='#ff3e00',blue \"npm run dev:svelte\" \"npm --prefix ./src/electron run dev:electron\"",
       "dev:svelte": "vite dev",
-      "dev:electron": "npm run dev:transpile && electron dist/electron.js",
-      "dev:transpile": "tsc -p tsconfig.electron.json #&& mv dist/electron.js dist/electron.cjs && mv dist/data-source.js dist/data-source.cjs",
-      "build": "cross-env NODE_ENV=production npm run build:svelte && npm run build:electron",
+      "build": "cross-env NODE_ENV=production npm run build:svelte && npm --prefix ./src/electron run build:electron",
       "build:svelte": "vite build",
-      "build:electron": "electron-builder -l --config build.config.json",
       "prepare": "svelte-kit sync",
       "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest src --config jest.config.json",
       "test:watch": "npm run test -- --watch",
@@ -26,11 +23,14 @@
       "Chrome 89"
    ],
    "dependencies": {
+      "@trpc/client": "^9.27.2",
+      "@trpc/server": "^9.27.2",
       "better-sqlite3": "^7.6.2",
       "electron-context-menu": "^3.3.0",
       "electron-reloader": "^1.2.3",
       "electron-serve": "^1.1.0",
       "electron-window-state": "^5.0.3",
+      "express": "^4.18.1",
       "pg": "^8.4.0",
       "reflect-metadata": "^0.1.13",
       "typeorm": "0.3.9"

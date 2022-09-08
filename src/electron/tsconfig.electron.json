@@ -2,17 +2,21 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowJs": false,
     "declaration": true,
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": "./",
     "sourceMap": true,
-    "lib": ["es6"]
+    "lib": [
+      "es5",
+      "es6"
+    ]
   },
-  "include": ["src/electron/**/*.ts"],
+  "include": ["*.ts"],
   "exclude": [
     "node_modules",
     "dist",

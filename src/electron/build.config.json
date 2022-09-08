@@ -5,7 +5,7 @@
 		"output": "build"
 	},
 	"files": [
-		"dist/electron/electron.cjs",
-		"dist/electron/preload.cjs"
+		"dist/electron.js",
+		"dist/preload.js"
 	]
 }

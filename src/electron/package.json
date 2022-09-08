@@ -3,7 +3,7 @@
    "version": "0.0.1",
    "private": true,
    "description": "Minimal Sveltekit + Electron starter template.",
-   "main": "dist/electron.js",
+   "main": "dist/main.js",
    "type": "commonjs",
    "scripts": {
       "dev": "cross-env NODE_ENV=dev npm run dev:all",

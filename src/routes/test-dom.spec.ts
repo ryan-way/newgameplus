@@ -14,6 +14,21 @@ import Index from './index.svelte';
  */
 
 describe('Index', () => {
+
+//   let renderedComponent: RenderResult<Index> ;
+
+//   beforeEach(() => {
+//     renderedComponent = render(Index);
+//   });
+
+//   describe('once the component has been rendered', () => {
+
+//     test('should show the proper heading', () => {
+//       expect(renderedComponent.getByText(/Hello Browser/)).toBeInTheDocument();
+//     });
+
+//   });
+
     describe('test test for testing', () => {
       test('test test should test', () => {
         expect(true).toBeTruthy();

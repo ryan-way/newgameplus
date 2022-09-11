@@ -6,24 +6,32 @@
   import { createTRPCClient } from '@trpc/client';
 
 	let desktop: string;
-  let test1: string;
-  let test2: string;
+  let sveltekitCount = 0;
+  let electronCount = 0;
 
-  const client = createTRPCClient<AppRouter>({
-    url: 'http://localhost:3001/trpc',
+  let sveltekitClient = createTRPCClient<AppRouter>({
+    url: 'http://localhost:3000/trpc',
   });
 
-  client.query('hello', 'something')
-    .then(res => {
-      console.log("test1 result:", JSON.stringify(res));
-      test1 = res.greet;
-  }).catch(() => console.log("test1 error"));
+  let electronClient = createTRPCClient<AppRouter>({
+    url: 'http://localhost:3001/trpc',
+  })
 
-  client.query('hello', 'something else')
-    .then(res => {
-      console.log("test2 result:", JSON.stringify(res));
-      test2 = res.greet;
-    }).catch(() => console.log("test2 error"));
+  function onSveltekitClick() {
+    sveltekitClient.query('count', sveltekitCount)
+      .then(res => {
+        console.log("Sveltekit result:", JSON.stringify(res));
+        sveltekitCount = res.num;
+      })
+  }
+
+  function onElectronClick() {
+    electronClient.query('count', electronCount)
+      .then(res => {
+        console.log("Electron result:", JSON.stringify(res));
+        electronCount = res.num;
+      })
+  }
 
 	if (window.electron && browser) {
 		window.electron.receive('from-main', (data: any) => {
@@ -48,15 +56,13 @@
 		{desktop}
 	{/if}
   <section>
-    {#if test1}
-      {test1}
-    {/if}
+    <p>Sveltekit Count is {sveltekitCount}</p>
+    <button on:click={onSveltekitClick}>Test SvelteKit</button>
   </section>
 
   <section>
-    {#if test2}
-      {test2}
-    {/if}
+    <p>Electron Count is {electronCount}</p>
+    <button on:click={onElectronClick}>Test Electron</button>
   </section>
 </main>
 

@@ -1,6 +1,7 @@
 import * as trpc from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { z } from 'zod';
+import path from 'path';
 
 const createContext = ({
   req,
@@ -9,12 +10,12 @@ const createContext = ({
 type Context = trpc.inferAsyncReturnType<typeof createContext>;
 
 const appRouter = trpc.router<Context>()
-  .query('hello', {
-    input: z.string().nullish(),
-    resolve(req) {
-      console.log("At endpoint hello:", JSON.stringify(req));
+  .query('count', {
+    input: z.number(),
+    async resolve(req) {
+      console.log("At endpoint count:", req.input);
       return {
-        greet: `hello ${ req.input ?? 'world' }`,
+        num: req.input + 1
       };
     },
   });

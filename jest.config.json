@@ -1,6 +1,6 @@
 {
   "transform": {
-    "^.+\\.js$": "babel-jest",
+    "^.+\\.js$": "ts-jest",
     "^.+\\.svelte$": [
       "svelte-jester/dist/transformer.mjs",
       {
@@ -16,6 +16,9 @@
       "<rootDir>/.svelte-kit/build/runtime/app$1"
     ]
   },
+  "transformIgnorePatterns": [
+    "node_modules/?!(carbon-components-svelte)"
+  ],
   "extensionsToTreatAsEsm": [
     ".svelte",
     ".ts"

@@ -1,6 +1,6 @@
 // Require for typeorm
 import type { Handle } from '@sveltejs/kit';
-import appRouter from './electron/trpc';
+import appRouter from '$lib/ai/router';
 import { createTRPCHandle } from 'trpc-sveltekit';
 
 /** @type {import('@sveltejs/kit').Handle} */

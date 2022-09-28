@@ -1,64 +1,47 @@
 <script lang="ts">
-  import { Tile, Modal, ComboBox, Toggle, Button, ToastNotification } from 'carbon-components-svelte';
-  import { TicTacToe } from '$lib/gamestate/tictactoe';
-  import type { Board } from '$lib/gamestate/tictactoe';
+  import { Tile, Modal, ComboBox, Toggle, Button } from 'carbon-components-svelte';
+  import { Reset, Play, board, winner, isGameOver, getBestMove } from '$lib/stores/tictactoe';
+  import type { Move } from '$lib/gamestate/tictactoe';
   import { onMount } from 'svelte';
-  import { writable } from 'svelte/store';
-  import type { Writable } from 'svelte/store';
-
 
   type State = 'newgame' | 'playing' | 'gameover';
   type Settings = { opponent: 'Player' | 'Computer', first: boolean };
 
-  let board: Board = [
-    [' ', ' ', ' '],
-    [' ', ' ', ' '],
-    [' ', ' ', ' '],
-  ]
-  let winner = undefined;
-  let state: Writable<State> = writable('newgame');
+  let state: State = 'newgame';
   let settings: Settings = {
     opponent: 'Player',
     first: true,
   }
 
-
-  let game = new TicTacToe(JSON.parse(JSON.stringify(board)));
-
   let selectedId: string = '0';
 
-  state.subscribe(state => {
-    winner = game.Winner;
-  })
+  isGameOver.subscribe(gameOver => {
+    if (gameOver) 
+      state = 'gameover'
+  });
 
   $: settings.opponent = selectedId === '0' ? 'Player' : 'Computer';
-  $: newGameDialogOpen = $state == 'newgame';
-  $: gameOverDialogOpen = $state == 'gameover';
 
-  function performMove(rowIdx, cellIdx) {
+  async function play(rowIdx: number, cellIdx: number) {
+    let move = (rowIdx*3 + cellIdx) as Move;
     console.log("Performing Move at: ", [rowIdx, cellIdx]);
-    game.Move(rowIdx, cellIdx);
+    Play(move as Move);
     if (settings.opponent == 'Computer') {
-      let [rowIdx, cellIdx] = getComputerMove();
-      console.log(rowIdx, cellIdx);
-      game.Move(rowIdx, cellIdx);
-    }
-    board = game.Board;
-    if (game.GameOver) {
-      state.set('gameover');
+      move = await getBestMove();
+      console.log(move);
+      Play(move);
     }
   }
 
-  function getComputerMove() {
-    let flatIdx = board.flat().findIndex(cell => cell == ' ');
-    console.log("Computer picked:", flatIdx);
-    return [Math.floor(flatIdx / 3), flatIdx % 3];
-  }
+  async function reset() {
+    state = 'playing';
+    Reset();
 
-  function reset() {
-    state.set('playing');
-    game.Reset();
-    board = game.Board;
+    if (settings.opponent == 'Computer' && !settings.first) {
+      let move = await getBestMove();
+      console.log(move);
+      Play(move);
+    }
   }
 
   onMount(() => {
@@ -67,10 +50,10 @@
 
 <main>
   <h2>Tic Tac Toe</h2>
-  {#each board as row, rowIdx}
+  {#each $board as row, rowIdx}
     <row>
       {#each row as cell, cellIdx}
-        <Tile on:click={() => performMove(rowIdx, cellIdx)}
+        <Tile on:click={() => play(rowIdx, cellIdx)}
           light={(rowIdx + cellIdx) % 2 === 0}>
           <h2>{cell}</h2>
         </Tile>
@@ -78,18 +61,18 @@
     </row>
   {/each}
   <Button on:click={() => {
-    state.set('newgame');
+    state = 'newgame';
   }}>New Game</Button>
   <p>Playing: {settings.opponent}</p>
   {#if settings.opponent == 'Computer'}
     <p>Player is going: {settings.first? 'first' : 'second'}</p>
   {/if}
-  <p>Game State: {$state}</p>
+  <p>Game State: {state}</p>
   <Modal
     size="lg"
-    bind:open={newGameDialogOpen}
+    open={state == 'newgame'}
     on:submit={reset}
-    on:click:button--secondary={() => state.set('playing')}
+    on:click:button--secondary={() => state = 'playing'}
     hasScrollingContent
     primaryButtonText="Start"
     secondaryButtonText="Go Back"
@@ -112,16 +95,21 @@
   </Modal>
   <Modal
       size="lg"
-      bind:open={gameOverDialogOpen}
+      open={state == 'gameover'}
       on:submit={() => {
-        state.set('newgame');
+        state = 'newgame';
+        Reset();
       }}
-      on:click:button--secondary={() => state.set('playing')}
+      secondaryButtons={[{ text: "Go Back" }, { text: "Play Again" }]}
+      on:click:button--secondary={({detail}) => {
+        if (detail.text == 'Play Again') Reset();
+        state = 'playing'
+      }}
       primaryButtonText="New Game"
       secondaryButtonText="Go Back"
       modalHeading="Game Over"
         >
-      The winner is {winner}
+      The winner is {$winner}
   </Modal>
 </main>
 

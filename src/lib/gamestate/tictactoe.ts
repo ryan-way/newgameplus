@@ -2,12 +2,14 @@ export type Cell = ' ' | 'O' | 'X';
 export type Row = [Cell, Cell, Cell];
 export type Board = [Row, Row, Row];
 export type GameState = 'playing' | 'gameover';
+export type Winner = 1 | 2 | undefined;
+export type Move = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export class TicTacToe {
 
   private currentToken: Cell = 'X';
   private gameOver: boolean = false;
-  private winner: number | undefined = undefined;
+  private winner: Winner = undefined;
 
   constructor(
     private board: Board
@@ -18,7 +20,9 @@ export class TicTacToe {
     return JSON.parse(JSON.stringify(this.board));
   }
 
-  public Move(rowIdx: number, cellIdx: number) {
+  public Move(move: Move) {
+    let rowIdx = Math.floor(move/3);
+    let cellIdx = move % 3;
     if (this.gameOver) return;
     if (this.board[rowIdx][cellIdx] !== ' ') return; 
     this.board[rowIdx][cellIdx] = this.currentToken;
@@ -32,7 +36,7 @@ export class TicTacToe {
     this.currentToken = 'X';
   }
 
-  public get Winner(): number | undefined {
+  public get Winner(): Winner {
     return this.winner;
   }
 

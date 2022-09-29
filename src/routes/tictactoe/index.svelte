@@ -1,8 +1,12 @@
 <script lang="ts">
   import { Tile, Modal, ComboBox, Toggle, Button } from 'carbon-components-svelte';
-  import { Reset, Play, board, winner, isGameOver, getBestMove } from '$lib/stores/tictactoe';
+  import { InitializeStore } from '$lib/stores/tictactoe';
+  import type { ITicTacToeStore } from '$lib/stores/tictactoe';
   import type { Move } from '$lib/gamestate/tictactoe';
   import { onMount } from 'svelte';
+
+  const store: ITicTacToeStore = InitializeStore();
+  const { board, winner, isGameOver } = store.getStores();
 
   type State = 'newgame' | 'playing' | 'gameover';
   type Settings = { opponent: 'Player' | 'Computer', first: boolean };
@@ -25,22 +29,22 @@
   async function play(rowIdx: number, cellIdx: number) {
     let move = (rowIdx*3 + cellIdx) as Move;
     console.log("Performing Move at: ", [rowIdx, cellIdx]);
-    Play(move as Move);
+    store.Play(move as Move);
     if (settings.opponent == 'Computer') {
-      move = await getBestMove();
+      move = await store.getBestMove();
       console.log(move);
-      Play(move);
+      store.Play(move);
     }
   }
 
   async function reset() {
     state = 'playing';
-    Reset();
+    store.Reset();
 
     if (settings.opponent == 'Computer' && !settings.first) {
-      let move = await getBestMove();
+      let move = await store.getBestMove();
       console.log(move);
-      Play(move);
+      store.Play(move);
     }
   }
 
@@ -98,11 +102,11 @@
       open={state == 'gameover'}
       on:submit={() => {
         state = 'newgame';
-        Reset();
+        store.Reset();
       }}
       secondaryButtons={[{ text: "Go Back" }, { text: "Play Again" }]}
       on:click:button--secondary={({detail}) => {
-        if (detail.text == 'Play Again') Reset();
+        if (detail.text == 'Play Again') store.Reset();
         state = 'playing'
       }}
       primaryButtonText="New Game"

@@ -1,41 +1,81 @@
 import { writable, derived } from 'svelte/store';
-import type { Writable } from 'svelte/store'
+import type { Writable, Readable } from 'svelte/store'
 import { TicTacToe } from '$lib/gamestate/tictactoe';
 import type { Board, Winner, Move } from '$lib/gamestate/tictactoe';
-import type { AppRouter } from '$lib/ai/router';
-import { createTRPCClient } from '@trpc/client';
+import type { ITicTacToeSolver } from '$lib/solver/tictactoe-solver';
+import { TicTacToeSolver } from '$lib/solver/tictactoe-solver';
 
-
-const game: TicTacToe = new TicTacToe([[' ', ' ', ' '],[' ', ' ', ' '],[' ', ' ', ' ']]);
-const aiRouter = createTRPCClient<AppRouter>({
-  url: 'http://localhost:3000/trpc'
-});
-
-const _board: Writable<Board> = writable(game.Board);
-const _winner: Writable<Winner> = writable(game.Winner);
-const _isGameOver: Writable<boolean> = writable(game.GameOver);
-
-
-function Play(move: Move) {
-  game.Move(move);
-  _board.set(game.Board);
-  _winner.set(game.Winner);
-  _isGameOver.set(game.GameOver);
+type Store = {
+  board: Readable<Board>,
+  winner: Readable<Winner>,
+  isGameOver: Readable<boolean>
 }
 
-async function getBestMove(): Promise<Move> {
-  return await aiRouter.query('tictactoe', { board: game.Board }) as Move;
+
+export class TicTacToeStore implements ITicTacToeStore {
+  readonly gameStateManager: TicTacToe = new TicTacToe(
+    [
+      [' ', ' ', ' '],
+      [' ', ' ', ' '],
+      [' ', ' ', ' ']
+    ]);
+
+  readonly board: Writable<Board> =
+    writable(this.gameStateManager.Board);
+  readonly winner: Writable<Winner> =
+    writable(this.gameStateManager.Winner);
+  readonly isGameOver: Writable<boolean> =
+    writable(this.gameStateManager.GameOver);
+
+  readonly boardReadable: Readable<Board> =
+    derived(this.board, $board => $board);
+  readonly winnerReadable: Readable<Winner> =
+    derived(this.winner, $winner => $winner);
+  readonly isGameOverReadable: Readable<boolean> =
+    derived(this.isGameOver, $isGameOver => $isGameOver);
+
+  constructor(
+    readonly aiServiceClient: ITicTacToeSolver = new TicTacToeSolver()
+  ) {
+    
+  }
+
+  Play(move: Move) {
+    this.gameStateManager.Move(move);
+    this.board.set(this.gameStateManager.Board);
+    this.winner.set(this.gameStateManager.Winner);
+    this.isGameOver.set(this.gameStateManager.GameOver);
+  }
+
+  async getBestMove(): Promise<Move> {
+    return this.aiServiceClient.getBestMove(this.gameStateManager.Board);
+  }
+
+  Reset() {
+    this.gameStateManager.Reset();
+    this.board.set(this.gameStateManager.Board);
+    this.winner.set(this.gameStateManager.Winner);
+    this.isGameOver.set(this.gameStateManager.GameOver);
+  }
+
+  getStores(): Store {
+    return {
+      board: this.boardReadable,
+      winner: this.winnerReadable,
+      isGameOver: this.isGameOverReadable
+    }
+  }
 }
 
-function Reset() {
-  game.Reset();
-  _board.set(game.Board);
-  _winner.set(game.Winner);
-  _isGameOver.set(game.GameOver);
+export interface ITicTacToeStore {
+  Play(move: Move): void;
+  Reset(): void;
+  getStores(): Store;
+  getBestMove(): Promise<Move>;
 }
 
-const board = derived(_board, $_board => $_board);
-const winner = derived(_winner, $_winner => $_winner);
-const isGameOver = derived(_isGameOver, $_isGameOver => $_isGameOver);
+function InitializeStore(): ITicTacToeStore {
+  return new TicTacToeStore();
+}
 
-export { Reset, Play, board, winner, isGameOver, getBestMove }
+export { InitializeStore } 

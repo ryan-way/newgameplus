@@ -47,7 +47,7 @@ export class TicTacToeStore implements ITicTacToeStore {
     this.isGameOver.set(this.gameStateManager.GameOver);
   }
 
-  async getBestMove(): Promise<Move> {
+  async getComputerMove(): Promise<Move> {
     return this.aiServiceClient.getBestMove(this.gameStateManager.Board);
   }
 
@@ -71,7 +71,7 @@ export interface ITicTacToeStore {
   Play(move: Move): void;
   Reset(): void;
   getStores(): Store;
-  getBestMove(): Promise<Move>;
+  getComputerMove(): Promise<Move>;
 }
 
 function InitializeStore(): ITicTacToeStore {

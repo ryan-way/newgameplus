@@ -3,7 +3,6 @@
   import { InitializeStore } from '$lib/stores/tictactoe';
   import type { ITicTacToeStore } from '$lib/stores/tictactoe';
   import type { Move } from '$lib/gamestate/tictactoe';
-  import { onMount } from 'svelte';
 
   const store: ITicTacToeStore = InitializeStore();
   const { board, winner, isGameOver } = store.getStores();
@@ -11,13 +10,13 @@
   type State = 'newgame' | 'playing' | 'gameover';
   type Settings = { opponent: 'Player' | 'Computer', first: boolean };
 
-  let state: State = 'newgame';
+  let state: State = 'playing';
   let settings: Settings = {
-    opponent: 'Player',
+    opponent: 'Computer',
     first: true,
   }
 
-  let selectedId: string = '0';
+  let selectedId: string = '1';
 
   isGameOver.subscribe(gameOver => {
     if (gameOver) 
@@ -31,7 +30,7 @@
     console.log("Performing Move at: ", [rowIdx, cellIdx]);
     store.Play(move as Move);
     if (settings.opponent == 'Computer') {
-      move = await store.getBestMove();
+      move = await store.getComputerMove();
       console.log(move);
       store.Play(move);
     }
@@ -42,14 +41,12 @@
     store.Reset();
 
     if (settings.opponent == 'Computer' && !settings.first) {
-      let move = await store.getBestMove();
+      let move = await store.getComputerMove();
       console.log(move);
       store.Play(move);
     }
   }
 
-  onMount(() => {
-  }) 
 </script>
 
 <main>

@@ -1,5 +1,5 @@
 import * as trpc from '@trpc/server';
-import { Board } from '$lib/gamestate/tictactoe';
+import { Board, Move } from '$lib/gamestate/tictactoe';
 import { z } from 'zod';
 import path from 'path';
 
@@ -11,7 +11,7 @@ const appRouter = trpc.router<Context>()
       board: z.array(z.array(z.enum([' ', 'O', 'X'])))
     }),
     async resolve(req) {
-      return req.input.board.flat().findIndex(cell => cell == ' ');
+      return req.input.board.flat().findIndex(cell => cell == ' ') as Move;
     },
   })
 

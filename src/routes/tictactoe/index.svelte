@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { Tile, Modal, ComboBox, Toggle, Button } from 'carbon-components-svelte';
+  import Modal from 'carbon-components-svelte/src/Modal/Modal.svelte';
+  import Tile from 'carbon-components-svelte/src/Tile/Tile.svelte';
+  import Toggle from 'carbon-components-svelte/src/Toggle/Toggle.svelte';
+  import Button from 'carbon-components-svelte/src/Button/Button.svelte';
+  import ComboBox from 'carbon-components-svelte/src/ComboBox/ComboBox.svelte';
   import { InitializeStore } from '$lib/stores/tictactoe';
   import type { ITicTacToeStore } from '$lib/stores/tictactoe';
   import type { Move } from '$lib/gamestate/tictactoe';
@@ -78,14 +82,14 @@
     primaryButtonText="Start"
     secondaryButtonText="Go Back"
     modalHeading="New Game">
-    <ComboBox
+   <ComboBox
       bind:selectedId
       items={[
         { id: '0', text: 'Player'},
         { id: '1', text: 'Computer'}
         ]}
       titleText="Opponent">
-    </ComboBox> 
+   </ComboBox>
     {#if settings.opponent == 'Computer'}
       <Toggle
           bind:toggled={settings.first}>

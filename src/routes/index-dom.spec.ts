@@ -18,7 +18,9 @@ describe('Index', () => {
       expect(renderedComponent.getByText(/Welcome to the Game App/)).toBeInTheDocument();
     })
     test('should render tictactoe link', () => {
-      expect(renderedComponent.getByText(/Tic Tac Toe/)).toBeInTheDocument();
+      const link = renderedComponent.getByText(/Tic Tac Toe/);
+      expect(link).toBeInTheDocument();
+      expect(link).toHaveAttribute('href', '/tictactoe');
     })
   })
 

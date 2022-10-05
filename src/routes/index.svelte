@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ClickableTile } from 'carbon-components-svelte';
+  import ClickableTile from 'carbon-components-svelte/src/Tile/ClickableTile.svelte';
 
 
   let games = [

@@ -11,7 +11,7 @@
       "build": "cross-env NODE_ENV=production npm run build:svelte && npm --prefix ./src/electron run build:electron",
       "build:svelte": "vite build",
       "prepare": "svelte-kit sync",
-      "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest src --config jest.config.json",
+      "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest test --config jest.config.json",
       "test:watch": "npm run test -- --watch",
       "typeorm": "typeorm-ts-node-commonjs"
    },

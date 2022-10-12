@@ -4,11 +4,11 @@
   import Toggle from 'carbon-components-svelte/src/Toggle/Toggle.svelte';
   import Button from 'carbon-components-svelte/src/Button/Button.svelte';
   import ComboBox from 'carbon-components-svelte/src/ComboBox/ComboBox.svelte';
-  import { InitializeStore } from '$lib/stores/tictactoe';
+  import { getStore } from '$lib/stores/tictactoe';
   import type { ITicTacToeStore } from '$lib/stores/tictactoe';
   import type { Move } from '$lib/gamestate/tictactoe';
 
-  const store: ITicTacToeStore = InitializeStore();
+  export let store: ITicTacToeStore = getStore();
   const { board, winner, isGameOver } = store.getStores();
 
   type State = 'newgame' | 'playing' | 'gameover';

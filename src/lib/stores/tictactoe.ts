@@ -74,8 +74,8 @@ export interface ITicTacToeStore {
   getComputerMove(): Promise<Move>;
 }
 
-function InitializeStore(): ITicTacToeStore {
+function getStore(): ITicTacToeStore {
   return new TicTacToeStore();
 }
 
-export { InitializeStore } 
+export { getStore } 

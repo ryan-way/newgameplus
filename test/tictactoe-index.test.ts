@@ -1,15 +1,37 @@
 /**
  * @jest-environment jsdom
  */
-
+import { jest } from '@jest/globals';
 import { render, RenderResult } from '@testing-library/svelte';
 import Index from '../src/routes/tictactoe/index.svelte';
+import { readable, writable } from 'svelte/store';
+import type { ITicTacToeStore } from '$lib/stores/tictactoe'
+import type { Board, Winner, Move } from '$lib/gamestate/tictactoe';
+
+const emptyBoard: Board = [
+  [' ', ' ', ' '],
+  [' ', ' ', ' '],
+  [' ', ' ', ' ']
+];
+
+const storeMock: ITicTacToeStore = {
+  Play: jest.fn(),
+  Reset: jest.fn(),
+  getStores: () => {
+    return {
+      board: writable(emptyBoard),
+      winner: writable(undefined as Winner),
+      isGameOver: writable(false)
+    }
+  },
+  getComputerMove: jest.fn(),
+}
 
 describe('Index', () => {
   let renderedComponent: RenderResult<Index>;
 
   beforeEach(() => {
-    renderedComponent = render(Index);
+    renderedComponent = render(Index, { store: storeMock });
   })
 
   describe('once the component has been rendered', () => {

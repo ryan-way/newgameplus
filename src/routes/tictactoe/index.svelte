@@ -4,6 +4,8 @@
   import Toggle from 'carbon-components-svelte/src/Toggle/Toggle.svelte';
   import Button from 'carbon-components-svelte/src/Button/Button.svelte';
   import ComboBox from 'carbon-components-svelte/src/ComboBox/ComboBox.svelte';
+  import RadioButtonGroup from 'carbon-components-svelte/src/RadioButtonGroup/RadioButtonGroup.svelte';
+  import RadioButton from 'carbon-components-svelte/src/RadioButton/RadioButton.svelte';
   import { getStore } from '$lib/stores/tictactoe';
   import type { ITicTacToeStore } from '$lib/stores/tictactoe';
   import type { Move } from '$lib/gamestate/tictactoe';
@@ -11,29 +13,22 @@
   export let store: ITicTacToeStore = getStore();
   const { board, winner, isGameOver } = store.getStores();
 
-  type State = 'newgame' | 'playing' | 'gameover';
-  type Settings = { opponent: 'Player' | 'Computer', first: boolean };
 
-  let state: State = 'playing';
-  let settings: Settings = {
-    opponent: 'Computer',
-    first: true,
-  }
+  let mode: 'PvP' | 'PvC' = 'PvC';
+  let computerFirst: boolean = false;
+  let gameOverDialogOpen: boolean = false;
 
-  let selectedId: string = '1';
 
   isGameOver.subscribe(gameOver => {
     if (gameOver) 
-      state = 'gameover'
+      gameOverDialogOpen = true;
   });
-
-  $: settings.opponent = selectedId === '0' ? 'Player' : 'Computer';
 
   async function play(rowIdx: number, cellIdx: number) {
     let move = (rowIdx*3 + cellIdx) as Move;
     console.log("Performing Move at: ", [rowIdx, cellIdx]);
     store.Play(move as Move);
-    if (settings.opponent == 'Computer') {
+    if (mode == 'PvC') {
       move = await store.getComputerMove();
       console.log(move);
       store.Play(move);
@@ -41,15 +36,17 @@
   }
 
   async function reset() {
-    state = 'playing';
     store.Reset();
 
-    if (settings.opponent == 'Computer' && !settings.first) {
+    if (mode == 'PvC' && !computerFirst) {
       let move = await store.getComputerMove();
       console.log(move);
       store.Play(move);
     }
   }
+
+  $: opponent = mode == 'PvP'? 'Player 2' : 'Computer';
+  $: player = mode == 'PvP' ? 'Player 1' : 'Player 2';
 
 </script>
 
@@ -66,56 +63,23 @@
     </row>
   {/each}
   <Button on:click={() => {
-    state = 'newgame';
-  }}>New Game</Button>
-  <p>Playing: {settings.opponent}</p>
-  {#if settings.opponent == 'Computer'}
-    <p>Player is going: {settings.first? 'first' : 'second'}</p>
+    reset();
+    }}>{$isGameOver ? 'Start Over' : 'New Game' }</Button>
+  <br/>
+  {#if $isGameOver}
+    <h4>The winner is {$winner == 1? player : opponent}</h4>
+    <br/>
   {/if}
-  <p>Game State: {state}</p>
-  <Modal
-    size="lg"
-    open={state == 'newgame'}
-    on:submit={reset}
-    on:click:button--secondary={() => state = 'playing'}
-    hasScrollingContent
-    primaryButtonText="Start"
-    secondaryButtonText="Go Back"
-    modalHeading="New Game">
-   <ComboBox
-      bind:selectedId
-      items={[
-        { id: '0', text: 'Player'},
-        { id: '1', text: 'Computer'}
-        ]}
-      titleText="Opponent">
-   </ComboBox>
-    {#if settings.opponent == 'Computer'}
-      <Toggle
-          bind:toggled={settings.first}>
-        <span slot="labelA">Go Second</span>
-        <span slot="labelB">Go First</span>
-      </Toggle>
-    {/if}
-  </Modal>
-  <Modal
-      size="lg"
-      open={state == 'gameover'}
-      on:submit={() => {
-        state = 'newgame';
-        store.Reset();
-      }}
-      secondaryButtons={[{ text: "Go Back" }, { text: "Play Again" }]}
-      on:click:button--secondary={({detail}) => {
-        if (detail.text == 'Play Again') store.Reset();
-        state = 'playing'
-      }}
-      primaryButtonText="New Game"
-      secondaryButtonText="Go Back"
-      modalHeading="Game Over"
-        >
-      The winner is {$winner}
-  </Modal>
+  <RadioButtonGroup legendText="Opponent" bind:selected={mode}>
+    <RadioButton labelText="Human" value='PvP' />
+    <RadioButton labelText="Computer" value='PvC' />
+  </RadioButtonGroup>
+  {#if mode == 'PvC'}
+    <RadioButtonGroup legendText="Turn" bind:selected={computerFirst}>
+      <RadioButton labelText="You" value={true} />
+      <RadioButton labelText="Them" value={false}/>
+    </RadioButtonGroup>
+  {/if}
 </main>
 
 <style>

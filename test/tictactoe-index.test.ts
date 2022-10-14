@@ -43,17 +43,6 @@ describe('Index', () => {
       expect(renderedComponent.getByText(/New Game/)).toBeInTheDocument();
     })
 
-    test('should be playing computer', () => {
-      expect(renderedComponent.getByText(/Playing: Computer/)).toBeInTheDocument();
-    })
-
-    test('should be playing first', () => {
-      expect(renderedComponent.getByText(/Player is going: first/)).toBeInTheDocument();
-    })
-
-    test('game state should be: playing', () => {
-      expect(renderedComponent.getByText(/Game State: playing/)).toBeInTheDocument();
-    })
   })
 
 

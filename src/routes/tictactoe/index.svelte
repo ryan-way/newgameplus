@@ -42,7 +42,7 @@
   }
 
   $: opponent = mode == 'PvP'? 'Player 2' : 'Computer';
-  $: player = mode == 'PvP' ? 'Player 1' : 'Player 2';
+  $: player = mode == 'PvP' ? 'Player 1' : 'Player';
 
   onMount(() => {
     humanFirst = true;

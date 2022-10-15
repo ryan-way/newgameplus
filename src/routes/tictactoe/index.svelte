@@ -9,20 +9,14 @@
   import { getStore } from '$lib/stores/tictactoe';
   import type { ITicTacToeStore } from '$lib/stores/tictactoe';
   import type { Move } from '$lib/gamestate/tictactoe';
+  import { onMount } from 'svelte';
 
   export let store: ITicTacToeStore = getStore();
   const { board, winner, isGameOver } = store.getStores();
 
 
   let mode: 'PvP' | 'PvC' = 'PvC';
-  let computerFirst: boolean = false;
-  let gameOverDialogOpen: boolean = false;
-
-
-  isGameOver.subscribe(gameOver => {
-    if (gameOver) 
-      gameOverDialogOpen = true;
-  });
+  let humanFirst: boolean = true;
 
   async function play(rowIdx: number, cellIdx: number) {
     let move = (rowIdx*3 + cellIdx) as Move;
@@ -33,12 +27,14 @@
       console.log(move);
       store.Play(move);
     }
+
+    console.log($board);
   }
 
   async function reset() {
     store.Reset();
 
-    if (mode == 'PvC' && !computerFirst) {
+    if (mode == 'PvC' && !humanFirst) {
       let move = await store.getComputerMove();
       console.log(move);
       store.Play(move);
@@ -48,20 +44,27 @@
   $: opponent = mode == 'PvP'? 'Player 2' : 'Computer';
   $: player = mode == 'PvP' ? 'Player 1' : 'Player 2';
 
+  onMount(() => {
+    humanFirst = true;
+    mode = 'PvC';
+  })
+
 </script>
 
 <main>
   <h2>Tic Tac Toe</h2>
+  <div role="board">
   {#each $board as row, rowIdx}
     <row>
       {#each row as cell, cellIdx}
         <Tile on:click={() => play(rowIdx, cellIdx)}
           light={(rowIdx + cellIdx) % 2 === 0}>
-          <h2>{cell}</h2>
+          <h2 role="cell">{cell}</h2>
         </Tile>
       {/each}
     </row>
   {/each}
+  </div>
   <Button on:click={() => {
     reset();
     }}>{$isGameOver ? 'Start Over' : 'New Game' }</Button>
@@ -75,9 +78,10 @@
     <RadioButton labelText="Computer" value='PvC' />
   </RadioButtonGroup>
   {#if mode == 'PvC'}
-    <RadioButtonGroup legendText="Turn" bind:selected={computerFirst}>
+    <br/>
+    <RadioButtonGroup legendText="First Turn" bind:selected={humanFirst}>
       <RadioButton labelText="You" value={true} />
-      <RadioButton labelText="Them" value={false}/>
+      <RadioButton labelText="Them" value={false} />
     </RadioButtonGroup>
   {/if}
 </main>

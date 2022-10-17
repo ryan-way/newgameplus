@@ -3,9 +3,5 @@
 	"productName": "Svelte Electron",
 	"directories": {
 		"output": "build"
-	},
-	"files": [
-		"dist/main.js",
-		"dist/preload.js"
-	]
+	}
 }

@@ -24,14 +24,18 @@
       "Chrome 89"
    ],
    "dependencies": {
+      "@trpc/server": "^9.27.4",
       "better-sqlite3": "^7.6.2",
+      "cors": "^2.8.5",
       "electron-context-menu": "^3.3.0",
       "electron-reloader": "^1.2.3",
       "electron-serve": "^1.1.0",
       "electron-window-state": "^5.0.3",
+      "express": "^4.18.2",
+      "pg": "^8.4.0",
       "reflect-metadata": "^0.1.13",
       "typeorm": "0.3.9",
-      "pg": "^8.4.0"
+      "zod": "^3.19.1"
    },
    "devDependencies": {
       "@babel/core": "^7.14.0",
@@ -41,6 +45,7 @@
       "@testing-library/jest-dom": "^5.14.0",
       "@testing-library/svelte": "^3.0.0",
       "@types/jest": "^27.5.2",
+      "@types/node": "^16.11.10",
       "@types/testing-library__jest-dom": "^5.14.0",
       "@typescript-eslint/eslint-plugin": "^5.30.6",
       "@typescript-eslint/parser": "^5.30.6",
@@ -65,9 +70,8 @@
       "svelte-jester": "^2.0.1",
       "svelte-preprocess": "^4.10.7",
       "ts-jest": "^27.0.0",
-      "typescript": "4.5.2",
-      "vite": "^2.9.14",
       "ts-node": "10.7.0",
-      "@types/node": "^16.11.10"
+      "typescript": "4.5.2",
+      "vite": "^2.9.14"
    }
 }

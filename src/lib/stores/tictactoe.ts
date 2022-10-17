@@ -74,8 +74,13 @@ export interface ITicTacToeStore {
   getComputerMove(): Promise<Move>;
 }
 
-function getStore(): ITicTacToeStore {
-  return new TicTacToeStore();
+let store: ITicTacToeStore;
+
+export function getStore(): ITicTacToeStore {
+  store = store ?? new TicTacToeStore();
+  return store;
 }
 
-export { getStore } 
+export function setStore(newStore: ITicTacToeStore) {
+  store = newStore;
+}

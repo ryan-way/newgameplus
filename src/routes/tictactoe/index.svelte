@@ -11,7 +11,7 @@
   import type { Move } from '$lib/gamestate/tictactoe';
   import { onMount } from 'svelte';
 
-  export let store: ITicTacToeStore = getStore();
+  let store: ITicTacToeStore = getStore();
   const { board, winner, isGameOver } = store.getStores();
 
 

@@ -6,6 +6,7 @@ import { render, RenderResult, fireEvent, act } from '@testing-library/svelte';
 import Index from '../../../src/routes/tictactoe/index.svelte';
 import { writable } from 'svelte/store';
 import type { ITicTacToeStore } from '$lib/stores/tictactoe'
+import { setStore } from '$lib/stores/tictactoe'
 import type { Board, Winner } from '$lib/gamestate/tictactoe';
 
 const emptyBoard: Board = [
@@ -47,9 +48,13 @@ function resetMock() {
 describe('Index', () => {
   let renderedComponent: RenderResult<Index>;
 
+  beforeAll(() => {
+    setStore(storeMock);
+  })
+
   beforeEach(() => {
     resetMock();
-    renderedComponent = render(Index, { store: storeMock });
+    renderedComponent = render(Index);
   })
 
   describe('once the component has been rendered', () => {

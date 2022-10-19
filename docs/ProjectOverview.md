@@ -1,10 +1,10 @@
 # Project Overview
 
-This document is used to outline the goals and motivations behind the New Game Plus App (NGP)
+This document is used to outline the goals and motivations behind the New Game Plus App (NG+)
 
 ## Motivation
 
-This is meant to be a pet project that I can use to practice and grow. I want to practice following the full software lifecycle, and operational best practices for software, while keeping everything organized and communicative. Doing this by myself from scratch. Creating an app with lots of games in them is the outlet for this, because it will invole from front end and back end work, as well has involving some AI elements.
+This is meant to be a pet project that I can use to practice and grow. I want to practice following the full software life cycle, and operational best practices for software, while keeping everything organized and communicative. Doing this by myself from scratch. Creating an app with lots of games in them is the outlet for this, because it will involve from front end and back end work, as well has involving some AI elements.
 
 ## Principles
 
@@ -24,7 +24,7 @@ Operational improvements are changes support processes. Essentially, tools are i
 
 **Examples**
 - unit testing
-- ui mock ups
+- ui mock ups tools
 - static analysis
 
 **Non Examples**
@@ -45,7 +45,7 @@ Architectural improvements are changes to how the overall app is organized, or b
 
 **Non Examples**
 - what is stored by a game variant
-- implementaion of an AI algorithm
+- implementation of an AI algorithm
 
 This will be represented by a project in the repo
 
@@ -56,4 +56,4 @@ Feature improvements include changes whose scope involve a single game.
 **Examples**
 - How the home page is laid out
 - game rules
-- speicific persistent mechanisms
+- specific persistent mechanisms

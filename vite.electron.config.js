@@ -3,7 +3,7 @@ const config = {
   build: {
     ssr: true,
     sourcemap: 'inline',
-    outDir: 'out/main',
+    outDir: 'dist/main',
     assetsDir: '.',
     minify: process.env.MODE !== 'development',
     lib: {

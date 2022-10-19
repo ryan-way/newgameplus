@@ -5,8 +5,8 @@
 		"output": "dist"
 	},
   "files": [
-    "out/main/main.cjs",
-    "out/preload/preload.cjs",
+    "dist/main/main.cjs",
+    "dist/preload/preload.cjs",
     {
       "from":"build",
       "to": ""

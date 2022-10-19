@@ -3,12 +3,7 @@ import * as trpcExpress from '@trpc/server/adapters/express';
 import { z } from 'zod';
 import path from 'path';
 
-const createContext = ({
-  req,
-  res,
-}: trpcExpress.CreateExpressContextOptions) => ({}) // no context
-type Context = trpc.inferAsyncReturnType<typeof createContext>;
-
+type Context = {};
 const appRouter = trpc.router<Context>()
   .query('count', {
     input: z.number(),

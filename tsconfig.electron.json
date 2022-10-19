@@ -9,14 +9,14 @@
     "allowJs": false,
     "declaration": true,
     "outDir": "dist",
-    "rootDir": "./",
+    "rootDir": "src",
     "sourceMap": true,
     "lib": [
       "es5",
       "es6"
     ]
   },
-  "include": ["*.ts"],
+  "include": ["./src/electron/*.ts"],
   "exclude": [
     "node_modules",
     "dist",

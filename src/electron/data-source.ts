@@ -1,13 +1,23 @@
-import "reflect-metadata"
-import { DataSource } from "typeorm"
-import { User } from "./entity/User"
+import { DataTypes, Sequelize } from "sequelize"
 
-export const AppDataSource = new DataSource({
-    type: "better-sqlite3",
-    database: "database.sqlite",
-    synchronize: true,
-    logging: false,
-    entities: [User],
-    migrations: [],
-    subscribers: [],
+const db = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'db/database.sqlite'
 })
+
+const User = db.define('User', {
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+  },
+  firstName: {
+    type: DataTypes.STRING,
+  },
+  lastName: {
+    type: DataTypes.STRING,
+  }
+})
+
+export { User };
+export default db;

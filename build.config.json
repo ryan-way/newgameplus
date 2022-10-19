@@ -1,0 +1,15 @@
+{
+	"appId": "com.example.app",
+	"productName": "Svelte Electron",
+	"directories": {
+		"output": "dist"
+	},
+  "files": [
+    "dist/main/main.cjs",
+    "dist/preload/preload.cjs",
+    {
+      "from":"build",
+      "to": ""
+    }
+  ]
+}

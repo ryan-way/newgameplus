@@ -6,8 +6,8 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import serve from 'electron-serve';
 import path from 'path';
 
-import { AppDataSource } from "./data-source"
-import { User } from "./entity/User"
+import db from "./data-source"
+import { User } from "./data-source"
 
 import express from 'express';
 import * as trpcExpress from '@trpc/server/adapters/express';
@@ -21,17 +21,13 @@ let mainWindow;
 
 
 function initializeTypeOrm() {
-  AppDataSource.initialize().then(async () => {
-
-      console.log("Loading users from the database...")
-      const user = await AppDataSource.manager.findOneBy(User, {
-        id: 1,
-      });
-      console.log("Loaded users: ", user ?? 'none');
-
-      console.log("Here you can setup and run express / fastify / any other framework.")
-
-  }).catch(error => console.log(error))
+  db.authenticate().then(async () => {
+    const [user, created] = await User.findOrCreate({
+      where: { id: 1, firstName: 'ryan', lastName: 'way' },
+    })
+    console.log('User found: ', user.firstName, user.lastName);
+    console.log('User was created? ', created);
+  }).catch(err => console.error(err));
 }
 
 function initializeTrpc() {
@@ -79,7 +75,7 @@ function createWindow() {
 			nodeIntegration: true,
 			spellcheck: false,
 			devTools: true,
-			preload: path.join(__dirname, "preload.js")
+			preload: path.join(__dirname, "..", "preload", "preload.cjs")
 		},
 		x: windowState.x,
 		y: windowState.y,

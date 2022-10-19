@@ -1,8 +1,5 @@
-/**
- * @jest-environment jsdom
- */
-import { jest } from '@jest/globals';
-import { render, RenderResult, fireEvent, act } from '@testing-library/svelte';
+import { expect, describe, beforeEach, it } from 'vitest';
+import { render, RenderResult } from '@testing-library/svelte';
 import Index from '../../src/routes/index.svelte'
 
 
@@ -14,12 +11,13 @@ describe('Index', () => {
   })
 
   describe('once the component has been rendered', () => {
-    test('Should render proper header', () => {
-      expect(renderedComponent.getByText('Welcome to the Game App')).toBeInTheDocument();
-    })
-    test('Should render Tic Tac Toe option', () => {
+    it('Should render proper header', () => {
+      expect(renderedComponent.getByText('Welcome to the Game App')).not.toBeNull();
+    });
+
+    it('Should render Tic Tac Toe option', () => {
       const tictactoe = renderedComponent.getByText('Tic Tac Toe');
-      expect(tictactoe).toBeInTheDocument();
-    })
+      expect(tictactoe).not.toBeNull();
+    });
   })
 })

@@ -1,7 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
+import { expect } from 'vitest';
 import { render, RenderResult } from '@testing-library/svelte';
 import Index from '../src/routes/index.svelte';
 
@@ -15,12 +12,13 @@ describe('Index', () => {
 
   describe('once the component has been rendered', () => {
     test('should show the proper heading', () => {
-      expect(renderedComponent.getByText(/Welcome to the Game App/)).toBeInTheDocument();
+      expect(renderedComponent.getByText(/Welcome to the Game App/)).not.toBeNull();
     })
     test('should render tictactoe link', () => {
-      const link = renderedComponent.getByText(/Tic Tac Toe/);
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute('href', '/tictactoe');
+      const element = renderedComponent.getByText(/Tic Tac Toe/);
+      expect(element).not.toBeNull();
+      expect(element.hasAttribute('href'))
+      expect(element.getAttribute('href')).toBe('/tictactoe');
     })
   })
 

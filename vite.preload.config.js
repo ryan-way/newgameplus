@@ -3,7 +3,7 @@ const config = {
   build: {
     ssr: true,
     sourcemap: 'inline',
-    outDir: 'dist/preload',
+    outDir: 'out/preload',
     assetsDir: '.',
     minify: process.env.MODE !== 'development',
     lib: {

@@ -1,0 +1,7 @@
+.webpack
+out
+coverage
+.github
+build
+dist
+.svelte-kit

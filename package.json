@@ -17,7 +17,8 @@
       "vite:electron": "vite build -c vite.electron.config.js",
       "vite": "npm run vite:preload && npm run vite:electron",
       "prepare": "svelte-kit sync",
-      "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest test --config jest.config.json",
+      "test": "vitest",
+      "coverage": "vitest run --coverage",
       "test:watch": "npm run test -- --watch",
       "typeorm": "typeorm-ts-node-commonjs",
       "postinstall": "electron-builder install-app-deps"
@@ -63,6 +64,7 @@
       "@types/testing-library__jest-dom": "^5.14.0",
       "@typescript-eslint/eslint-plugin": "^5.30.6",
       "@typescript-eslint/parser": "^5.30.6",
+      "@vitest/coverage-c8": "^0.24.3",
       "babel-jest": "^27.0.0",
       "carbon-components-svelte": "^0.70.6",
       "concurrently": "^7.2.2",
@@ -90,6 +92,7 @@
       "ts-node": "10.7.0",
       "typescript": "4.5.2",
       "vite": "^2.9.14",
-      "vite-plugin-babel-compiler": "^0.3.0"
+      "vite-plugin-babel-compiler": "^0.3.0",
+      "vitest": "^0.24.3"
    }
 }

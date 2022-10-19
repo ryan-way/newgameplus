@@ -1,3 +1,4 @@
+coverage/
 types/env.d.ts
 yarn-error.log
 pnpm-lock.yaml

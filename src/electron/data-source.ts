@@ -1,9 +1,9 @@
-import { DataTypes, Sequelize } from "sequelize"
+import { DataTypes, Sequelize } from 'sequelize';
 
 const db = new Sequelize({
   dialect: 'sqlite',
-  storage: 'db/database.sqlite'
-})
+  storage: 'db/database.sqlite',
+});
 
 const User = db.define('User', {
   id: {
@@ -16,8 +16,8 @@ const User = db.define('User', {
   },
   lastName: {
     type: DataTypes.STRING,
-  }
-})
+  },
+});
 
 export { User };
 export default db;

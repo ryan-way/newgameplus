@@ -6,7 +6,7 @@ export class SolverService {
 
   constructor(readonly queryKey: 'tictactoe') {
     this.trpcClient = createTRPCClient<AppRouter>({
-      url: 'http://localhost:3000/trpc'
+      url: 'http://localhost:3000/trpc',
     });
   }
 

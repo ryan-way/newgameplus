@@ -3,14 +3,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, RenderResult, fireEvent, act } from '@testing-library/svelte';
 import Index from '../../../src/routes/tictactoe/index.svelte';
 import { writable } from 'svelte/store';
-import type { ITicTacToeStore } from '$lib/stores/tictactoe'
-import { getStore } from '$lib/stores/tictactoe'
+import type { ITicTacToeStore } from '$lib/stores/tictactoe';
+import { getStore } from '$lib/stores/tictactoe';
 import type { Board, Winner } from '$lib/gamestate/tictactoe';
 
 const emptyBoard: Board = [
   [' ', ' ', ' '],
   [' ', ' ', ' '],
-  [' ', ' ', ' ']
+  [' ', ' ', ' '],
 ];
 
 const board = writable(emptyBoard);
@@ -25,16 +25,18 @@ vi.mock('$lib/stores/tictactoe', () => {
       return {
         board: board,
         winner: winner,
-        isGameOver: isGameOver
-      }
+        isGameOver: isGameOver,
+      };
     }),
     getComputerMove: vi.fn(),
-  }
+  };
 
   return {
-    getStore: () => { return store }
+    getStore: () => {
+      return store;
+    },
   };
-})
+});
 
 describe('Index', () => {
   let renderedComponent: RenderResult<Index>;
@@ -43,11 +45,11 @@ describe('Index', () => {
   beforeEach(() => {
     renderedComponent = render(Index);
     store = getStore();
-  })
+  });
 
   afterEach(() => {
     vi.clearAllMocks();
-  })
+  });
 
   describe('once the component has been rendered', () => {
     it('should show the proper heading', () => {
@@ -87,15 +89,15 @@ describe('Index', () => {
     });
 
     describe('board should', () => {
-      it('not contain X\'s', () => {
+      it("not contain X's", () => {
         expect(renderedComponent.queryAllByText('X')).toHaveLength(0);
       });
 
-      it('not contain O\'s', () => {
-       expect(renderedComponent.queryAllByText('O')).toHaveLength(0);
+      it("not contain O's", () => {
+        expect(renderedComponent.queryAllByText('O')).toHaveLength(0);
       });
 
-      it('should all contain \' \'', () => {
+      it("should all contain ' '", () => {
         const cells = renderedComponent.queryAllByRole('cell');
         expect(cells).toHaveLength(9);
         cells.forEach(cell => expect(cell.innerHTML).toBe(' '));
@@ -124,10 +126,10 @@ describe('Index', () => {
           ['X', ' ', ' '],
           [' ', ' ', ' '],
           [' ', ' ', ' '],
-        ]
+        ];
         await act(() => {
           board.set(playBoard);
-        })
+        });
         expect(renderedComponent.getByText('X')).not.toBeNull();
       });
 
@@ -136,7 +138,7 @@ describe('Index', () => {
           ['O', ' ', ' '],
           [' ', ' ', ' '],
           [' ', ' ', ' '],
-        ]
+        ];
         await act(() => {
           board.set(playBoard);
         });
@@ -152,30 +154,30 @@ describe('Index', () => {
 
         expect(renderedComponent.getByText(/Start Over/)).not.toBeNull();
         expect(renderedComponent.queryByText(/New Game/)).toBeNull();
-      })
+      });
 
       describe('and computer wins', () => {
         it('computer is displayed as winner', async () => {
-          await(act(() => {
+          await act(() => {
             winner.set(2);
             isGameOver.set(true);
-          }));
+          });
 
           expect(renderedComponent.getByText(/The winner is Computer/)).not.toBeNull();
-        })
-      })
+        });
+      });
 
       describe('and player wins', () => {
         it('player is displayed as winner', async () => {
-          await(act(() => {
+          await act(() => {
             winner.set(1);
             isGameOver.set(true);
-          }));
+          });
 
           expect(renderedComponent.getByText(/The winner is Player/)).not.toBeNull();
-        })
-      })
-    })
+        });
+      });
+    });
 
     it.skip('should match snapshot', () => {
       // Svelte randomly generates some id's when generating html
@@ -185,6 +187,4 @@ describe('Index', () => {
       expect(renderedComponent.container.innerHTML).toMatchSnapshot();
     });
   });
-
 });
-

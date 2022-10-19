@@ -1,44 +1,35 @@
 import { writable, derived } from 'svelte/store';
-import type { Writable, Readable } from 'svelte/store'
+import type { Writable, Readable } from 'svelte/store';
 import { TicTacToe } from '$lib/gamestate/tictactoe';
 import type { Board, Winner, Move } from '$lib/gamestate/tictactoe';
 import type { ITicTacToeSolver } from '$lib/solver/tictactoe-solver';
 import { TicTacToeSolver } from '$lib/solver/tictactoe-solver';
 
 type Store = {
-  board: Readable<Board>,
-  winner: Readable<Winner>,
-  isGameOver: Readable<boolean>
-}
-
+  board: Readable<Board>;
+  winner: Readable<Winner>;
+  isGameOver: Readable<boolean>;
+};
 
 export class TicTacToeStore implements ITicTacToeStore {
-  readonly gameStateManager: TicTacToe = new TicTacToe(
-    [
-      [' ', ' ', ' '],
-      [' ', ' ', ' '],
-      [' ', ' ', ' ']
-    ]);
+  readonly gameStateManager: TicTacToe = new TicTacToe([
+    [' ', ' ', ' '],
+    [' ', ' ', ' '],
+    [' ', ' ', ' '],
+  ]);
 
-  readonly board: Writable<Board> =
-    writable(this.gameStateManager.Board);
-  readonly winner: Writable<Winner> =
-    writable(this.gameStateManager.Winner);
-  readonly isGameOver: Writable<boolean> =
-    writable(this.gameStateManager.GameOver);
+  readonly board: Writable<Board> = writable(this.gameStateManager.Board);
+  readonly winner: Writable<Winner> = writable(this.gameStateManager.Winner);
+  readonly isGameOver: Writable<boolean> = writable(this.gameStateManager.GameOver);
 
-  readonly boardReadable: Readable<Board> =
-    derived(this.board, $board => $board);
-  readonly winnerReadable: Readable<Winner> =
-    derived(this.winner, $winner => $winner);
-  readonly isGameOverReadable: Readable<boolean> =
-    derived(this.isGameOver, $isGameOver => $isGameOver);
+  readonly boardReadable: Readable<Board> = derived(this.board, $board => $board);
+  readonly winnerReadable: Readable<Winner> = derived(this.winner, $winner => $winner);
+  readonly isGameOverReadable: Readable<boolean> = derived(
+    this.isGameOver,
+    $isGameOver => $isGameOver
+  );
 
-  constructor(
-    readonly aiServiceClient: ITicTacToeSolver = new TicTacToeSolver()
-  ) {
-    
-  }
+  constructor(readonly aiServiceClient: ITicTacToeSolver = new TicTacToeSolver()) {}
 
   Play(move: Move) {
     this.gameStateManager.Move(move);
@@ -62,8 +53,8 @@ export class TicTacToeStore implements ITicTacToeStore {
     return {
       board: this.boardReadable,
       winner: this.winnerReadable,
-      isGameOver: this.isGameOverReadable
-    }
+      isGameOver: this.isGameOverReadable,
+    };
   }
 }
 

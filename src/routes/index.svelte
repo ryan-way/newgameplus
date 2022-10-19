@@ -1,10 +1,7 @@
 <script lang="ts">
   import ClickableTile from 'carbon-components-svelte/src/Tile/ClickableTile.svelte';
 
-
-  let games = [
-    { name: 'Tic Tac Toe', link: '/tictactoe' },
-  ]
+  let games = [{ name: 'Tic Tac Toe', link: '/tictactoe' }];
 </script>
 
 <main>

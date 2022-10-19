@@ -6,25 +6,21 @@ export type Winner = 1 | 2 | undefined;
 export type Move = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export class TicTacToe {
-
   private currentToken: Cell = 'X';
-  private gameOver: boolean = false;
+  private gameOver = false;
   private winner: Winner = undefined;
 
-  constructor(
-    private board: Board
-  ) {
-  }
+  constructor(private board: Board) {}
 
   public get Board(): Board {
     return JSON.parse(JSON.stringify(this.board));
   }
 
   public Move(move: Move) {
-    let rowIdx = Math.floor(move/3);
-    let cellIdx = move % 3;
+    const rowIdx = Math.floor(move / 3);
+    const cellIdx = move % 3;
     if (this.gameOver) return;
-    if (this.board[rowIdx][cellIdx] !== ' ') return; 
+    if (this.board[rowIdx][cellIdx] !== ' ') return;
     this.board[rowIdx][cellIdx] = this.currentToken;
     this.toggleCurrentToken();
     this.checkGameOver();
@@ -32,7 +28,11 @@ export class TicTacToe {
 
   public Reset() {
     this.gameOver = false;
-    this.board = [[' ', ' ', ' '],[' ', ' ', ' '],[' ', ' ', ' ']];
+    this.board = [
+      [' ', ' ', ' '],
+      [' ', ' ', ' '],
+      [' ', ' ', ' '],
+    ];
     this.currentToken = 'X';
   }
 
@@ -49,31 +49,31 @@ export class TicTacToe {
   }
 
   private checkGameOver() {
-    for (let row of this.board) {
+    for (const row of this.board) {
       if (row[0] !== ' ' && row.every(val => val === row[0])) {
-        this.winner = row[0] == 'X'? 1 : 2;
+        this.winner = row[0] == 'X' ? 1 : 2;
         this.gameOver = true;
         return;
       }
     }
 
-    for (let idx in this.board[0]) {
+    for (const idx in this.board[0]) {
       if (this.board[0][idx] !== ' ' && this.board.every(row => row[idx] === this.board[0][idx])) {
-        this.winner = this.board[0][idx] == 'X'? 1 : 2;
+        this.winner = this.board[0][idx] == 'X' ? 1 : 2;
         this.gameOver = true;
         return;
       }
     }
 
     if (this.board[1][1] !== ' ') {
-      if ((this.board[0][0] == this.board[1][1] && this.board[1][1] == this.board[2][2]) ||
-        this.board[0][2] == this.board[1][1] && this.board[1][1] == this.board[2][0]) {
-        this.winner = this.board[1][1] == 'X'? 1 : 2;
+      if (
+        (this.board[0][0] == this.board[1][1] && this.board[1][1] == this.board[2][2]) ||
+        (this.board[0][2] == this.board[1][1] && this.board[1][1] == this.board[2][0])
+      ) {
+        this.winner = this.board[1][1] == 'X' ? 1 : 2;
         this.gameOver = true;
         return;
       }
     }
-
   }
-
 }

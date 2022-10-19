@@ -1,10 +1,10 @@
 <script lang="ts">
-  import "carbon-components-svelte/css/g90.css";
-	import { onMount } from 'svelte';
+  import 'carbon-components-svelte/css/g90.css';
+  import { onMount } from 'svelte';
   import { ClickableTile, Link } from 'carbon-components-svelte';
 
-	let ready: boolean = false;
-	onMount(() => (ready = true));
+  let ready: boolean = false;
+  onMount(() => (ready = true));
 </script>
 
 <div class="dragbar" />
@@ -22,11 +22,11 @@
   main {
     padding: 10%;
   }
-	.dragbar {
-		-webkit-app-region: drag;
-		position: absolute;
-		z-index: 100;
-		height: 40px;
-		width: 100%;
-	}
+  .dragbar {
+    -webkit-app-region: drag;
+    position: absolute;
+    z-index: 100;
+    height: 40px;
+    width: 100%;
+  }
 </style>

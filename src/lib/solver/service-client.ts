@@ -6,7 +6,7 @@ export class AiServiceClient<Params, Response> {
 
   contructor() {
     this.trpcClient = createTRPCClient<AppRouter>({
-      url: 'http://localhost:3000/trpc'
+      url: 'http://localhost:3000/trpc',
     });
   }
 

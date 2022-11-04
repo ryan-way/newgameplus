@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install
+        run: npm install
+
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run build
+
+      - name: Test Coverage
+        run: npm run coverage 
+
+      - name: Integration Tests
+        run: echo "This is where I'd put integration tests... IF I HAD THEM!!!"
+
+      - name: Linting
+        run: npm run lint
+      
+      - name: Audit
+        run: npm audit
+

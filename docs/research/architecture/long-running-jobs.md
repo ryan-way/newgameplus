@@ -12,9 +12,10 @@ This document outlines and chooses an option.
 
 Web workers can be used to do background work. The API is build directly into javascript. However, it is not recommended to perform long running jobs in web workers so this is eliminated as an option.
 
-
 ### Electron Solutions
-___
+
+---
+
 ### Main Process
 
 Electron's process model include two components. The main process and the renderer process.

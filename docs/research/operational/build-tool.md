@@ -2,7 +2,6 @@
 
 The purpose of this document is to choose a build tool
 
-
 ## Options
 
 ### Vite
@@ -17,6 +16,5 @@ The purpose of this document is to choose a build tool
 - Most popular javascript bundler
 - Difficult to configure
 - Slow
-
 
 Vite is the better option here.

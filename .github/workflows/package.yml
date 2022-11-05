@@ -1,9 +1,8 @@
 on:
-  workflow_run:
-    workflows: ["quality-check"]
-    branches: [main, develop]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+      - develop
 jobs:
   package:
     runs-on: ubuntu-latest
@@ -24,6 +23,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
+
+      - name: Test Coverage
+        run: npm run coverage 
+
+      - name: Integration Tests
+        run: echo "This is where I'd put integration tests... IF I HAD THEM!!!"
+
+      - name: Linting
+        run: npm run lint
+      
+      - name: Audit
+        run: echo #npm audit, electron stops this from passing
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3

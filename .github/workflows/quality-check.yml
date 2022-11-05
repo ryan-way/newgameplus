@@ -37,21 +37,22 @@ jobs:
       - name: Audit
         run: echo #npm audit, electron stops this from passing
 
-      - name: Roll patch
-        if: github.ref == 'refs/heads/develop'
-        run: npm version patch
+      # TODO
+      # - name: Roll patch
+      #   if: github.ref == 'refs/heads/develop'
+      #   run: npm version patch
 
-      - name: Roll minor
-        if: github.ref == 'refs/heads/main'
-        run: npm version minor
+      # - name: Roll minor
+      #   if: github.ref == 'refs/heads/main'
+      #   run: npm version minor
 
-      - name: Push Tag
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
-        run: git push --tags
+      # - name: Push Tag
+      #   if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+      #   run: git push --tags
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        if: github.ref == 'refs/heads/main'
-        with: 
-          files: dist/*.AppImage
-          retention-days: 
+      # - name: Create Release
+      #   uses: softprops/action-gh-release@v1
+      #   if: github.ref == 'refs/heads/main'
+      #   with: 
+      #     files: dist/*.AppImage
+      #     retention-days: 

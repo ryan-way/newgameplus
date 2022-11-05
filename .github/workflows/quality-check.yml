@@ -1,0 +1,58 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install
+        run: npm install
+
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run build
+
+      - name: Test Coverage
+        run: npm run coverage 
+
+      - name: Integration Tests
+        run: echo "This is where I'd put integration tests... IF I HAD THEM!!!"
+
+      - name: Linting
+        run: npm run lint
+      
+      - name: Audit
+        run: echo #npm audit, electron stops this from passing
+
+      # TODO
+      # - name: Roll patch
+      #   if: github.ref == 'refs/heads/develop'
+      #   run: npm version patch
+
+      # - name: Roll minor
+      #   if: github.ref == 'refs/heads/main'
+      #   run: npm version minor
+
+      # - name: Push Tag
+      #   if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+      #   run: git push --tags
+
+      # - name: Create Release
+      #   uses: softprops/action-gh-release@v1
+      #   if: github.ref == 'refs/heads/main'
+      #   with: 
+      #     files: dist/*.AppImage
+      #     retention-days: 

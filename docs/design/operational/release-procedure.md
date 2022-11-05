@@ -8,5 +8,6 @@
 - git flow release finish -n --nodevelopmerge
 
 [should switch to main branch]
+
 - git pull -f
   - take remote history because release doesn't allow rebasing, which is better tbh

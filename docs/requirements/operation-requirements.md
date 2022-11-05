@@ -11,7 +11,6 @@ The purpose of this document is the outline the operational requirements for the
 - **R5**: must have git commit hooks
 - **R6**: must have automated builds
 
-
 ## Details
 
 ### R1 Unit Testing

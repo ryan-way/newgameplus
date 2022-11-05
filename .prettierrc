@@ -1,5 +1,5 @@
 {
-  "svelteSortOrder": "scripts-markup-styles",
+  "svelteSortOrder": "options-scripts-markup-styles",
   "htmlWhitespaceSensitivity": "ignore",
   "requirePragma": false,
   "bracketSpacing": true,

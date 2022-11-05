@@ -21,7 +21,6 @@ Since we are using Sqlite for peristant storage, and ORM should be determined.
 - Follows graphql declarative syntax
 - auto migrations
 
-
 ## Decision
 
 Going with Prisma here

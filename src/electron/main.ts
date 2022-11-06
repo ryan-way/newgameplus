@@ -13,46 +13,47 @@ import express from 'express';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import appRouter from './trpc';
 import cors from 'cors';
+import { PrismaClient } from '@prisma/client';
 
 const serveURL = serve({ directory: '.' });
 const port = process.env.PORT || 3000;
 const dev = !app.isPackaged;
 let mainWindow;
 
-function initializeTypeOrm() {
-  db.authenticate()
-    .then(async () => {
-      const [user, created] = await User.findOrCreate({
-        where: { id: 1, firstName: 'ryan', lastName: 'way' },
-      });
-      console.log('User found: ', user.firstName, user.lastName);
-      console.log('User was created? ', created);
-    })
-    .catch(err => console.error(err));
+class Main {
+  async start() {
+    const prisma = new PrismaClient();
+
+    const count = await prisma.count.findFirst();
+    console.log(count);
+  }
 }
 
-function initializeTrpc() {
-  const app = express();
+const main = new Main();
+main.start();
 
-  app.use((req, res, next) => {
-    console.log('Express', req.method, req.path, req.body ?? req.query);
+// function initializeTrpc() {
+//   const app = express();
 
-    next();
-  });
-  app.use(cors());
-  app.use(
-    '/trpc',
-    trpcExpress.createExpressMiddleware({
-      router: appRouter,
-    })
-  );
+//   app.use((req, res, next) => {
+//     console.log('Express', req.method, req.path, req.body ?? req.query);
 
-  app.get('/', (_req, res) => res.send('hello'));
+//     next();
+//   });
+//   app.use(cors());
+//   app.use(
+//     '/trpc',
+//     trpcExpress.createExpressMiddleware({
+//       router: appRouter,
+//     })
+//   );
 
-  app.listen(3001, () => {
-    console.log('Express listening on port 3001');
-  });
-}
+//   app.get('/', (_req, res) => res.send('hello'));
+
+//   app.listen(3001, () => {
+//     console.log('Express listening on port 3001');
+//   });
+// }
 
 function createWindow() {
   const windowState = windowStateManager({
@@ -127,21 +128,18 @@ function createMainWindow() {
 
   if (dev) loadVite(port);
   else serveURL(mainWindow);
-
-  initializeTypeOrm();
-  initializeTrpc();
 }
 
-app.once('ready', createMainWindow);
-app.on('activate', () => {
-  if (!mainWindow) {
-    createMainWindow();
-  }
-});
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
+// app.once('ready', createMainWindow);
+// app.on('activate', () => {
+//   if (!mainWindow) {
+//     createMainWindow();
+//   }
+// });
+// app.on('window-all-closed', () => {
+//   if (process.platform !== 'darwin') app.quit();
+// });
 
-ipcMain.on('to-main', (event, count) => {
-  return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
-});
+// ipcMain.on('to-main', (event, count) => {
+//   return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
+// });

@@ -1,6 +1,6 @@
 {
   "name": "new-game-plus",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "description": "Project for implementing games in full stack app",
   "main": "dist/main/main.cjs",

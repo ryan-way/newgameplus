@@ -1,8 +1,8 @@
 {
-  "name": "sveltekit-electron",
+  "name": "new-game-plus",
   "version": "0.0.2",
   "private": true,
-  "description": "Minimal Sveltekit + Electron starter template.",
+  "description": "Project for implementing games in full stack app",
   "main": "dist/main/main.cjs",
   "type": "module",
   "scripts": {

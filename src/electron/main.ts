@@ -9,11 +9,9 @@ import path from 'path';
 import db from './data-source';
 import { User } from './data-source';
 
-import express from 'express';
-import * as trpcExpress from '@trpc/server/adapters/express';
-import appRouter from './trpc';
-import cors from 'cors';
+import { router } from './trpc';
 import { PrismaClient } from '@prisma/client';
+import { createIPCHandler } from 'electron-trpc';
 
 const serveURL = serve({ directory: '.' });
 const port = process.env.PORT || 3000;
@@ -26,34 +24,12 @@ class Main {
 
     const count = await prisma.count.findFirst();
     console.log(count);
+    createIPCHandler({ ipcMain, router });
   }
 }
 
 const main = new Main();
 main.start();
-
-// function initializeTrpc() {
-//   const app = express();
-
-//   app.use((req, res, next) => {
-//     console.log('Express', req.method, req.path, req.body ?? req.query);
-
-//     next();
-//   });
-//   app.use(cors());
-//   app.use(
-//     '/trpc',
-//     trpcExpress.createExpressMiddleware({
-//       router: appRouter,
-//     })
-//   );
-
-//   app.get('/', (_req, res) => res.send('hello'));
-
-//   app.listen(3001, () => {
-//     console.log('Express listening on port 3001');
-//   });
-// }
 
 function createWindow() {
   const windowState = windowStateManager({
@@ -130,16 +106,16 @@ function createMainWindow() {
   else serveURL(mainWindow);
 }
 
-// app.once('ready', createMainWindow);
-// app.on('activate', () => {
-//   if (!mainWindow) {
-//     createMainWindow();
-//   }
-// });
-// app.on('window-all-closed', () => {
-//   if (process.platform !== 'darwin') app.quit();
-// });
+app.once('ready', createMainWindow);
+app.on('activate', () => {
+  if (!mainWindow) {
+    createMainWindow();
+  }
+});
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
 
-// ipcMain.on('to-main', (event, count) => {
-//   return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
-// });
+ipcMain.on('to-main', (event, count) => {
+  return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
+});

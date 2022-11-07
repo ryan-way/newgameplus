@@ -30,16 +30,21 @@
     "npm": ">=7",
     "yarn": "use npm - https://github.com/FractalHQ/sveltekit-electron/issues/12#issuecomment-1068399385"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seeds/index.mjs"
+  },
   "browserslist": [
     "Chrome 89"
   ],
   "dependencies": {
+    "@prisma/client": "^4.5.0",
     "@trpc/client": "^9.27.2",
     "@trpc/server": "^9.27.2",
     "cors": "^2.8.5",
     "depcheck": "^1.4.3",
     "electron-context-menu": "^3.3.0",
     "electron-serve": "^1.1.0",
+    "electron-trpc": "^0.1.0",
     "electron-window-state": "^5.0.3",
     "express": "^4.18.1",
     "jsdom": "^20.0.2",
@@ -55,7 +60,7 @@
     "@sveltejs/adapter-static": "1.0.0-next.36",
     "@sveltejs/kit": "1.0.0-next.372",
     "@testing-library/svelte": "^3.0.0",
-    "@types/node": "^16.11.10",
+    "@types/node": "^16.18.3",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
     "@vitest/coverage-c8": "^0.24.3",
@@ -76,11 +81,13 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
+    "prisma": "^4.5.0",
     "sass": "^1.53.0",
     "svelte": "^3.49.0",
     "svelte-check": "^2.8.0",
     "svelte-preprocess": "^4.10.7",
-    "typescript": "4.5.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.5.2",
     "vite": "^2.9.14",
     "vitest": "^0.24.3"
   }

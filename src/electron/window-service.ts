@@ -10,32 +10,6 @@ export class WindowService {
   private main;
   private windowState;
 
-  startMainWindow() {
-    app.once('ready', () => {
-      this.windowState = windowStateManager({
-        defaultWidth: 800,
-        defaultHeight: 600,
-      });
-
-      this.main = this.getWindow(true);
-      this.main.once('ready-to-show', () => {
-        this.main.show();
-        this.main.focus();
-      });
-
-      this.main.on('close', () => {
-        this.windowState.saveState(this.main);
-      });
-
-      if (dev) this.loadVite();
-      else this.serveURL(this.main);
-    });
-
-    app.on('window-all-closed', () => {
-      if (process.platform !== 'darwin') app.quit();
-    });
-  }
-
   serveURL = serve({ directory: '.' });
 
   loadVite() {
@@ -79,7 +53,34 @@ export class WindowService {
 
     return win;
   }
+
+  public static instance = new WindowService();
+
+  public static startWindowService() {
+    app.once('ready', () => {
+      WindowService.instance.windowState = windowStateManager({
+        defaultWidth: 800,
+        defaultHeight: 600,
+      });
+
+      WindowService.instance.main = WindowService.instance.getWindow(true);
+      WindowService.instance.main.once('ready-to-show', () => {
+        WindowService.instance.main.show();
+        WindowService.instance.main.focus();
+      });
+
+      WindowService.instance.main.on('close', () => {
+        WindowService.instance.windowState.saveState(WindowService.instance.main);
+      });
+
+      if (dev) WindowService.instance.loadVite();
+      else WindowService.instance.serveURL(WindowService.instance.main);
+    });
+
+    app.on('window-all-closed', () => {
+      if (process.platform !== 'darwin') app.quit();
+    });
+  }
 }
 
-const windowService = new WindowService();
-export default windowService;
+export default WindowService.startWindowService as startWindowService;

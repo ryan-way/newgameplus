@@ -2,7 +2,7 @@
 import 'reflect-metadata';
 import contextMenu from 'electron-context-menu';
 import { ipcMain } from 'electron';
-import windowService from './window-service';
+import startWindowService from './window-service';
 
 import { router } from './trpc';
 import { createIPCHandler } from 'electron-trpc';
@@ -21,8 +21,7 @@ contextMenu({
 class Main {
   async start() {
     createIPCHandler({ ipcMain, router });
-
-    windowService.startMainWindow();
+    startWindowService();
   }
 }
 

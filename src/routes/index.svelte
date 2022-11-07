@@ -46,7 +46,10 @@
   /*   }) */
   /*   .catch(err => console.error(err)); */
 
-  let games = [{ name: 'Tic Tac Toe', link: '/tictactoe' }];
+  let games = [
+    { name: 'Tic Tac Toe', link: '/tictactoe' },
+    { name: 'Counter', link: '/counter' },
+  ];
 </script>
 
 <main>

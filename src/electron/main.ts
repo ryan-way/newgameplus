@@ -1,10 +1,8 @@
-// Require for typeorm
-import 'reflect-metadata';
 import contextMenu from 'electron-context-menu';
 import { ipcMain } from 'electron';
-import startWindowService from './window-service';
+import startWindowService from './window';
 
-import { router } from './trpc';
+import { router } from './../trpc';
 import { createIPCHandler } from 'electron-trpc';
 
 contextMenu({

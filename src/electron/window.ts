@@ -4,7 +4,7 @@ import path from 'path';
 import windowStateManager from 'electron-window-state';
 
 const port = process.env.PORT || 3000;
-const dev = !app.isPackaged;
+const dev = app ? !app.isPackaged : false;
 
 export class WindowService {
   private main;
@@ -21,11 +21,7 @@ export class WindowService {
     });
   }
 
-  getProcessWindow() {
-    return this.getWindow(false);
-  }
-
-  getWindow(show: boolean) {
+  getWindow(show: boolean, preload: string) {
     const win = new BrowserWindow({
       show: show,
       backgroundColor: 'whitesmoke',
@@ -42,7 +38,7 @@ export class WindowService {
         nodeIntegration: true,
         spellcheck: false,
         devTools: true,
-        preload: path.join(__dirname, '..', 'preload', 'preload.cjs'),
+        preload: preload,
       },
       x: this.windowState.x,
       y: this.windowState.y,
@@ -50,6 +46,7 @@ export class WindowService {
       height: this.windowState.height,
     });
     this.windowState.manage(win);
+    win.webContents.openDevTools();
 
     return win;
   }
@@ -63,7 +60,10 @@ export class WindowService {
         defaultHeight: 600,
       });
 
-      WindowService.instance.main = WindowService.instance.getWindow(true);
+      WindowService.instance.main = WindowService.instance.getWindow(
+        true,
+        path.join(__dirname, '..', 'preload', 'preload.cjs')
+      );
       WindowService.instance.main.once('ready-to-show', () => {
         WindowService.instance.main.show();
         WindowService.instance.main.focus();

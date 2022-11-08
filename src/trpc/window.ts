@@ -3,7 +3,7 @@ import path from 'path';
 
 export class WindowService {
   getProcessWindow() {
-    const process = path.join(__dirname, '..', 'process', 'preload.cjs');
+    const process = path.join(__dirname, '..', 'compute-preload', 'preload.cjs');
     return this.getWindow(true, process);
   }
 
@@ -34,7 +34,7 @@ export class WindowService {
       },
     });
     win.webContents.openDevTools();
-    win.loadFile('../index/index.html');
+    win.loadFile('../compute/index.html');
 
     return win;
   }

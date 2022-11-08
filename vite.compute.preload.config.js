@@ -1,19 +1,18 @@
 const config = {
   mode: process.env.MODE,
-  ssr: true,
-  publicDir: 'src/compute/static',
   build: {
+    ssr: true,
     sourcemap: 'inline',
-    outDir: 'dist/index/',
+    outDir: 'dist/compute-preload',
     assetsDir: '.',
     minify: process.env.MODE !== 'development',
     lib: {
-      entry: 'src/compute/index.ts',
-      formats: ['es'],
+      entry: 'src/compute/preload.ts',
+      formats: ['cjs'],
     },
     rollupOptions: {
       output: {
-        entryFileNames: '[name].js',
+        entryFileNames: '[name].cjs',
       },
     },
     emptyOutDir: true,

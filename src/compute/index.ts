@@ -1,9 +1,3 @@
-import { createTRPCClient } from '@trpc/client';
-import type { AppRouter } from '../trpc/router';
-import { ipcLink } from '../trpc/link';
+import trpcClient from '../trpc/client';
 
-const client = createTRPCClient<AppRouter>({
-  links: [ipcLink()],
-});
-
-client.mutation('compute-count', 9);
+trpcClient.mutation('compute-count', 9);

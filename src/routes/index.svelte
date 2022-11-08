@@ -1,12 +1,7 @@
 <script lang="ts">
   import ClickableTile from 'carbon-components-svelte/src/Tile/ClickableTile.svelte';
-  import type { AppRouter } from './../trpc';
-  import { ipcLink } from './../trpc/link';
-  import { createTRPCClient } from '@trpc/client';
+  import trpcClient from '../trpc/client';
 
-  /* let trpcClient = createTRPCClient<AppRouter>({ */
-  /*   links: [ipcLink()], */
-  /* }); */
 
   /* async function test() { */
   /*   console.log('sanity check'); */

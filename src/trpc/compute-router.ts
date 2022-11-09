@@ -24,7 +24,10 @@ const router = trpc
       console.log('COMPUTER_COUNT');
       const processWin = service.getProcessWindow();
       count = input;
-      return await getCount();
+      return await getCount().then(res => {
+        service.closeWindow(processWin);
+        return res;
+      });
     },
   })
   .query('get-count', {
@@ -38,6 +41,7 @@ const router = trpc
     async resolve({ input }) {
       console.log('MUT_COMPUTE_GET_COUNT');
       setCount(input);
+      console.log('DONE');
     },
   });
 

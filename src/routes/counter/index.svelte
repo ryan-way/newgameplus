@@ -1,19 +1,32 @@
 <script lang="ts">
-  let number = 9;
+  import { countService, computeService } from '$lib/service';
+  import { onMount } from 'svelte';
+  import { writable } from 'svelte/store';
 
-  function reset() {
-    number = 0;
+  const count = writable(null);
+
+  async function reset() {
+    $count.count = 0;
+    await countService.update($count);
+    count.set(await countService.first());
   }
 
-  function increment() {
-    number++;
+  async function increment() {
+    $count.count = await computeService.count($count.count);
+    await countService.update($count);
+    count.set(await countService.first());
   }
+
+  onMount(async () => {
+    count.set(await countService.first());
+  });
 </script>
 
 <main>
   <h1>Counter</h1>
-
-  <h1>{number}</h1>
+  {#if $count}
+    <h1>{$count.count}</h1>
+  {/if}
 
   <button on:click={increment} type="button">Increment</button>
   <button on:click={reset} type="button">Reset</button>

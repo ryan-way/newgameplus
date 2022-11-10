@@ -4,7 +4,7 @@ import path from 'path';
 export class WindowService {
   getProcessWindow() {
     const process = path.join(__dirname, '..', 'compute-preload', 'preload.cjs');
-    return this.getWindow(true, process);
+    return this.getWindow(false, process);
   }
 
   closeWindow(win: BrowserWindow) {

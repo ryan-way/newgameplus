@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { render, RenderResult, fireEvent, act } from '@testing-library/svelte';
-import Index from '../../../src/routes/tictactoe/index.svelte';
+import Index from '../../../src/routes/tictactoe/+page.svelte';
 import { writable } from 'svelte/store';
 import type { ITicTacToeStore } from '$lib/stores/tictactoe';
 import { getStore } from '$lib/stores/tictactoe';

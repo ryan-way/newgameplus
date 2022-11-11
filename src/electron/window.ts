@@ -3,7 +3,7 @@ import serve from 'electron-serve';
 import path from 'path';
 import windowStateManager from 'electron-window-state';
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5173;
 const dev = app ? !app.isPackaged : false;
 
 export class WindowService {

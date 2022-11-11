@@ -1,5 +1,6 @@
 {
   "name": "new-game-plus",
+  "author": "Ryan Way <ryan.keith.way@gmail.com",
   "version": "0.0.3",
   "private": true,
   "description": "Project for implementing games in full stack app",
@@ -57,7 +58,7 @@
   "devDependencies": {
     "@babel/core": "^7.14.0",
     "@babel/preset-env": "^7.14.0",
-    "@sveltejs/adapter-static": "1.0.0-next.36",
+    "@sveltejs/adapter-static": "^1.0.0-next.48",
     "@sveltejs/kit": "1.0.0-next.542",
     "@testing-library/svelte": "^3.0.0",
     "@types/node": "^16.18.3",

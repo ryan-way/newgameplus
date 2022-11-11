@@ -38,7 +38,7 @@ vi.mock('$lib/stores/tictactoe', () => {
   };
 });
 
-describe('Index', () => {
+describe.skip('Index', () => {
   let renderedComponent: RenderResult<Index>;
   let store;
 

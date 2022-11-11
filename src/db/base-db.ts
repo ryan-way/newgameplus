@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-export abstract class BaseDb<T> {
+export abstract class BaseDb<T extends { id: number }> {
   private static client = new PrismaClient();
 
   static getClient() {
@@ -30,8 +30,12 @@ export abstract class BaseDb<T> {
   }
 
   public update(data: T): T {
+    const { id, ...rest } = data;
     return this.table.update({
-      where: data,
+      where: {
+        id: id,
+      },
+      data: rest,
     });
   }
 

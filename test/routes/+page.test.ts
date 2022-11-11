@@ -11,11 +11,16 @@ describe('Index', () => {
 
   describe('once the component has been rendered', () => {
     it('Should render proper header', () => {
-      expect(renderedComponent.getByText('Welcome to the Game App')).not.toBeNull();
+      expect(renderedComponent.getByText('New Game Plus')).not.toBeNull();
     });
 
     it('Should render Tic Tac Toe option', () => {
       const tictactoe = renderedComponent.getByText('Tic Tac Toe');
+      expect(tictactoe).not.toBeNull();
+    });
+
+    it('Should render Counter option', () => {
+      const tictactoe = renderedComponent.getByText('Counter');
       expect(tictactoe).not.toBeNull();
     });
   });

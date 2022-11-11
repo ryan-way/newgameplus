@@ -11,7 +11,7 @@ describe('Index', () => {
 
   describe('once the component has been rendered', () => {
     test('should show the proper heading', () => {
-      expect(renderedComponent.getByText(/Welcome to the Game App/)).not.toBeNull();
+      expect(renderedComponent.getByText(/New Game Plus/)).not.toBeNull();
     });
     test('should render tictactoe link', () => {
       const element = renderedComponent.getByText(/Tic Tac Toe/);

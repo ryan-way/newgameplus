@@ -6,5 +6,10 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    coverage: {
+      lines: 80,
+      functions: 80,
+      statements: 80,
+    },
   },
 });

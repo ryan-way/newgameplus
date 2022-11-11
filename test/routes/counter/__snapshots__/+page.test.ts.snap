@@ -1,0 +1,15 @@
+// Vitest Snapshot v1
+
+exports[`Counter > after count has returned > updated component > should match snapshot 1`] = `undefined`;
+
+exports[`Counter > after count has returned > updated component > should render counter as zero 1`] = `"0"`;
+
+exports[`Counter > after count has returned > updated component > should render decrement button 1`] = `"Decrement"`;
+
+exports[`Counter > after count has returned > updated component > should render increment button 1`] = `"Increment"`;
+
+exports[`Counter > after count has returned > updated component > should render reset button 1`] = `"Reset"`;
+
+exports[`Counter > when the component is rendered > should match snapshot 1`] = `undefined`;
+
+exports[`Counter > when the component is rendered > should show the proper heading 1`] = `"Counter"`;

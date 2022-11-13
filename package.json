@@ -1,7 +1,7 @@
 {
   "name": "new-game-plus",
   "author": "Ryan Way <ryan.keith.way@gmail.com",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "private": true,
   "description": "Project for implementing games in full stack app",
   "main": "dist/main/main.cjs",

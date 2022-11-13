@@ -12,15 +12,11 @@
 
   async function play(rowIdx: number, cellIdx: number) {
     let move = (rowIdx * 3 + cellIdx) as Move;
-    console.log('Performing Move at: ', [rowIdx, cellIdx]);
     store.Play(move as Move);
     if (mode == 'PvC') {
       move = await store.getComputerMove();
-      console.log(move);
       store.Play(move);
     }
-
-    console.log($board);
   }
 
   async function reset() {
@@ -28,7 +24,6 @@
 
     if (mode == 'PvC' && !humanFirst) {
       let move = await store.getComputerMove();
-      console.log(move);
       store.Play(move);
     }
   }

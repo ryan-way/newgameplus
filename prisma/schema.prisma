@@ -31,5 +31,5 @@ model Metric {
   category String
   operation String
   params String
-  measurement String
+  measurement Int
 }

@@ -1,6 +1,6 @@
-import { expect } from 'vitest';
+import { expect, vi, describe, beforeEach, test } from 'vitest';
 import { render, RenderResult, fireEvent } from '@testing-library/svelte';
-import { countService, computeService } from '$lib/service';
+import { countService, computeService, logService } from '$lib/service';
 import { tick } from 'svelte';
 import Counter from '../../../src/routes/counter/+page.svelte';
 
@@ -13,9 +13,16 @@ vi.mock('$lib/service', () => {
   const computeService = {
     count: vi.fn(x => Promise.resolve(x + 1)),
   };
+
+  const logService = {
+    info: vi.fn(),
+    error: vi.fn(),
+    metric: vi.fn(),
+  };
   return {
     countService,
     computeService,
+    logService,
   };
 });
 

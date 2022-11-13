@@ -9,27 +9,27 @@ export abstract class BaseDb<T extends { id: number }> {
 
   constructor(private table) {}
 
-  public first(): T {
-    return this.table.findFirst();
+  public async first(): Promise<T> {
+    return await this.table.findFirst();
   }
 
-  public read(id: number): T {
-    return this.table.findUnique({
+  public async read(id: number): Promise<T> {
+    return await this.table.findUnique({
       where: {
         id: id,
       },
     });
   }
 
-  public readAll(): T[] {
+  public async readAll(): Promise<T[]> {
     return this.table.findMany();
   }
 
-  public create(data: T): T {
+  public async create(data: T): Promise<T> {
     return this.table.create({ data: data });
   }
 
-  public update(data: T): T {
+  public async update(data: T): Promise<T> {
     const { id, ...rest } = data;
     return this.table.update({
       where: {
@@ -39,7 +39,7 @@ export abstract class BaseDb<T extends { id: number }> {
     });
   }
 
-  public delete(data: T) {
+  public async delete(data: T) {
     this.table.delete({ where: data });
   }
 }

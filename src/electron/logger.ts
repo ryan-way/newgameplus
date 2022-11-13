@@ -50,3 +50,6 @@ export class Logger {
     this.metricDb.create(metric);
   }
 }
+
+const logger = new Logger();
+export default logger;

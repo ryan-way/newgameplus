@@ -10,7 +10,6 @@ const router = trpc
   .router()
   .query('first', {
     async resolve() {
-      console.log('FIRST CALLED');
       return db.first();
     },
   })

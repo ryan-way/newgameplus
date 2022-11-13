@@ -21,7 +21,6 @@ const router = trpc
   .query('count', {
     input: z.number(),
     async resolve({ input }) {
-      console.log('COMPUTER_COUNT');
       const processWin = service.getProcessWindow();
       count = input;
       return await getCount().then(res => {
@@ -32,16 +31,13 @@ const router = trpc
   })
   .query('get-count', {
     async resolve() {
-      console.log('COMPUTER_GET_COUNT');
       return count;
     },
   })
   .mutation('count', {
     input: z.number(),
     async resolve({ input }) {
-      console.log('MUT_COMPUTE_GET_COUNT');
       setCount(input);
-      console.log('DONE');
     },
   });
 

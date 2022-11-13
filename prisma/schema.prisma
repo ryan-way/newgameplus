@@ -14,3 +14,22 @@ model Count {
   id Int @id @default(autoincrement())
   count Int
 }
+
+model LogEntry {
+  id Int @id @default(autoincrement())
+  level String
+  session String 
+  dateTime DateTime
+  message String
+}
+
+
+model Metric {
+  id Int @id @default(autoincrement())
+  session String
+  dateTime DateTime
+  category String
+  operation String
+  params String
+  measurement Int
+}

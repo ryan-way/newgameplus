@@ -14,7 +14,6 @@ export class WindowService {
 
   loadVite() {
     this.main.loadURL(`http://localhost:${port}`).catch(e => {
-      console.log('Error loading URL, retrying', e);
       setTimeout(() => {
         this.loadVite();
       }, 200);

@@ -1,26 +1,30 @@
 <script lang="ts">
-  import { countService, computeService } from '$lib/service';
+  import { countService, computeService, logService } from '$lib/service';
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
 
   const counter = writable(null);
 
   async function sync() {
+    logService.info('Counter: syncing counter');
     await countService.update($counter);
     counter.set(await countService.first());
   }
 
   async function reset() {
+    logService.info('Counter: reseting...');
     $counter.count = 0;
     sync();
   }
 
   async function increment() {
+    logService.info('Counter: incrementing...');
     $counter.count = await computeService.count($counter.count);
     sync();
   }
 
   async function decrement() {
+    logService.info('Counter: decrementing...');
     $counter.count -= 1;
     sync();
   }

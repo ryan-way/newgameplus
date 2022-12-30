@@ -1,88 +1,150 @@
 <script lang="ts">
-  import { getStore } from '$lib/stores/tictactoe';
-  import type { ITicTacToeStore } from '$lib/stores/tictactoe';
-  import type { Move } from '$lib/gamestate/tictactoe';
-  import { onMount } from 'svelte';
+  let showSettings = true;
 
-  let store: ITicTacToeStore = getStore();
-  const { board, winner, isGameOver } = store.getStores();
+  enum Mode {
+    PvC = 'PvC',
+    PvP = 'PvP',
+    CvC = 'CvC',
+  }
 
-  let mode: 'PvP' | 'PvC' = 'PvC';
-  let humanFirst: boolean = true;
+  let board = [
+    [' ', ' ', ' '],
+    [' ', ' ', ' '],
+    [' ', ' ', ' '],
+  ];
 
-  async function play(rowIdx: number, cellIdx: number) {
-    let move = (rowIdx * 3 + cellIdx) as Move;
-    store.Play(move as Move);
-    if (mode == 'PvC') {
-      move = await store.getComputerMove();
-      store.Play(move);
+  let mode: Mode = Mode.PvC;
+
+  let first: boolean = true;
+
+  let token = 'X';
+
+  let computingMove = false;
+
+  function toggleToken() {
+    token = token == 'X' ? 'O' : 'X';
+  }
+
+  function playMove(move: number) {
+    if (move > 8 || move < 0) {
+      console.error('Move out of bounds: ', move);
+      return;
+    }
+
+    board[Math.floor(move / 3)][move % 3] = token;
+    toggleToken();
+  }
+
+  function toggle() {
+    showSettings = !showSettings;
+    console.log('Toggling Settings');
+
+    if (showSettings == false) {
+      console.log('Resetting Game');
+      resetGame();
     }
   }
 
-  async function reset() {
-    store.Reset();
+  function resetGame() {
+    resetBoard();
 
-    if (mode == 'PvC' && !humanFirst) {
-      let move = await store.getComputerMove();
-      store.Play(move);
+    console.log(
+      'Starting game with settings',
+      JSON.stringify({
+        Mode: mode.toString(),
+        First: first,
+      })
+    );
+
+    if ((mode == Mode.PvC && first == false) || mode == Mode.CvC) {
+      playComputerMove();
     }
   }
 
-  $: opponent = mode == 'PvP' ? 'Player 2' : 'Computer';
-  $: player = mode == 'PvP' ? 'Player 1' : 'Player';
+  function gameOver() {
+    return !board.flat().some(x => x === ' ');
+  }
 
-  onMount(() => {
-    humanFirst = true;
-    mode = 'PvC';
-  });
+  async function playComputerMove() {
+    console.log('Playing Computer Move');
+    computingMove = true;
+    let move = calcComputerMove();
+    await new Promise(res => setTimeout(res, 500));
+    playMove(move);
+    computingMove = false;
+
+    if (mode === Mode.CvC && !gameOver()) playComputerMove();
+  }
+
+  function onClick(row: number, cell: number) {
+    if (mode === Mode.CvC) return;
+    if (computingMove == true) return;
+    if (board[row][cell] !== ' ') return;
+
+    console.log('Playing Human Move');
+    playMove(row * 3 + cell);
+
+    if (mode !== Mode.PvP && !gameOver()) playComputerMove();
+  }
+
+  function calcComputerMove() {
+    return board.flat().findIndex(x => x == ' ');
+  }
+
+  function resetBoard() {
+    token = 'X';
+    board = [
+      [' ', ' ', ' '],
+      [' ', ' ', ' '],
+      [' ', ' ', ' '],
+    ];
+  }
+
+  function calcClass(cell: number, row: number) {
+    return (
+      ((cell + row) % 2 == 0 ? 'bg-[#504945]' : 'bg-[#665C54]') + ' text-5xl hover:bg-[#458688]'
+    );
+  }
 </script>
 
-<main>
-  <h2>Tic Tac Toe</h2>
-  <div role="board">
-    {#each $board as row, rowIdx}
-      <row>
+<main class="grid">
+  <h2 class="text-5xl pb-20 align-middle" data-testid="counter">Tic Tac Toe</h2>
+
+  {#if showSettings}
+    <div class="pb-10">
+      <p>Mode</p>
+      <input type="radio" bind:group={mode} value={Mode.PvC} id="PvC" />
+      <label for="PvC">PvC</label>
+      <input type="radio" bind:group={mode} value={Mode.PvP} id="PvP" />
+      <label for="PvP">PvP</label>
+      <input type="radio" bind:group={mode} value={Mode.CvC} id="CvC" />
+      <label for="CvC">CvC</label>
+    </div>
+
+    <div class="pb-20">
+      <label for="first">First?</label>
+      <input type="checkbox" value="true" bind:checked={first} />
+    </div>
+  {:else}
+    <div class="place-self-center w-72 h-72 grid grid-cols-3 grid-rows-3 pb-20">
+      {#each board as row, rowIdx}
         {#each row as cell, cellIdx}
-          <div on:click={() => play(rowIdx, cellIdx)}>
-            <h2 role="cell">{cell}</h2>
-          </div>
+          <span class={calcClass(cellIdx, rowIdx)} on:click={() => onClick(rowIdx, cellIdx)}>
+            {cell}
+          </span>
         {/each}
-      </row>
-    {/each}
-  </div>
-  <button
-    on:click={() => {
-      reset();
-    }}
-  >
-    {$isGameOver ? 'Start Over' : 'New Game'}
-  </button>
-  <br />
-  {#if $isGameOver}
-    <h4>The winner is {$winner == 1 ? player : opponent}</h4>
-    <br />
-  {/if}
-  <div legendText="Opponent">
-    <input type="radio" label="Human" />
-    <input type="radio" label="Computer" />
-  </div>
-  {#if mode == 'PvC'}
-    <br />
-    <div legendText="First Turn">
-      <input type="radio" label="You" />
-      <input type="radio" label="Them" />
+      {/each}
     </div>
   {/if}
+
+  <button
+    class="place-self-center transition ease-in-out p-5 m-5 max-w-fit rounded-full bg-[#3c3836] hover:-translate-y-5 hover:bg-[#689d6a] text-center align-middle shadow-2xl"
+    data-testid="reset"
+    on:click={toggle}
+    type="button"
+  >
+    {showSettings ? 'Start' : 'New Game'}
+  </button>
 </main>
 
-<style>
-  main {
-    display: grid;
-    justify-content: center;
-    text-align: center;
-  }
-
-  row {
-    display: flex;
-  }
-</style>
+<style></style>

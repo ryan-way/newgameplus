@@ -1,9 +1,8 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 
-import { ComputeWindowService } from '../window';
+import { ComputeWindow } from '../window';
 
-const service = new ComputeWindowService();
 let countRes = null;
 let count: number;
 async function getCount(): Promise<number> {
@@ -21,10 +20,11 @@ const router = trpc
   .query('count', {
     input: z.number(),
     async resolve({ input }) {
-      const processWin = service.getProcessWindow();
+      const window = new ComputeWindow();
+      window.Ready();
       count = input;
       return await getCount().then(res => {
-        service.closeWindow(processWin);
+        window.destroy();
         return res;
       });
     },

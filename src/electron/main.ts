@@ -1,6 +1,6 @@
 import contextMenu from 'electron-context-menu';
 import { ipcMain } from 'electron';
-import startWindowService from './window';
+import { MainWindow } from './window';
 
 import { router } from './router/main';
 import { createIPCHandler } from 'electron-trpc';
@@ -19,7 +19,8 @@ contextMenu({
 class Main {
   async start() {
     createIPCHandler({ ipcMain, router });
-    startWindowService();
+    const window = new MainWindow();
+    window.Ready();
   }
 }
 

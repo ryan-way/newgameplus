@@ -1,85 +1,75 @@
-import { app, BrowserWindow } from 'electron';
+import { app } from 'electron';
 import serve from 'electron-serve';
-import path from 'path';
-import windowStateManager from 'electron-window-state';
+import windowStateManager, { State } from 'electron-window-state';
+import { BaseWindow, defaultWindowConfig } from './base-window';
+import { BrowserWindowConstructorOptions } from 'electron';
+import { LOCALHOST } from './constants';
 
-const port = process.env.PORT || 5173;
 const dev = app ? !app.isPackaged : false;
 
-export class MainWindowService {
-  private main;
-  private windowState;
+export class MainWindow extends BaseWindow {
+  private windowState: State;
 
-  serveURL = serve({ directory: '.' });
-
-  loadVite() {
-    this.main.loadURL(`http://localhost:${port}`).catch(e => {
-      setTimeout(() => {
-        this.loadVite();
-      }, 200);
-    });
+  constructor() {
+    super();
   }
 
-  getWindow(show: boolean, preload: string) {
-    const win = new BrowserWindow({
-      show: show,
-      backgroundColor: 'whitesmoke',
-      titleBarStyle: 'hidden',
-      autoHideMenuBar: true,
-      trafficLightPosition: {
-        x: 17,
-        y: 32,
-      },
-      minHeight: 450,
-      minWidth: 500,
-      webPreferences: {
-        contextIsolation: true,
-        nodeIntegration: true,
-        spellcheck: false,
-        devTools: true,
-        preload: preload,
-      },
-      x: this.windowState.x,
-      y: this.windowState.y,
-      width: this.windowState.width,
-      height: this.windowState.height,
-    });
-    this.windowState.manage(win);
-    win.webContents.openDevTools();
-
-    return win;
-  }
-
-  public static instance = new MainWindowService();
-
-  public static startWindowService() {
+  Ready() {
     app.once('ready', () => {
-      MainWindowService.instance.windowState = windowStateManager({
-        defaultWidth: 800,
-        defaultHeight: 600,
-      });
-
-      MainWindowService.instance.main = MainWindowService.instance.getWindow(
-        true,
-        path.join(__dirname, '..', 'preload', 'preload.cjs')
-      );
-      MainWindowService.instance.main.once('ready-to-show', () => {
-        MainWindowService.instance.main.show();
-        MainWindowService.instance.main.focus();
-      });
-
-      MainWindowService.instance.main.on('close', () => {
-        MainWindowService.instance.windowState.saveState(MainWindowService.instance.main);
-      });
-
-      if (dev) MainWindowService.instance.loadVite();
-      else MainWindowService.instance.serveURL(MainWindowService.instance.main);
+      this.CreateWindowStateManager();
+      this.createWindow();
+      this.ReadyToShow();
+      this.RegisterClose();
+      this.Serve();
     });
 
     app.on('window-all-closed', () => {
       if (process.platform !== 'darwin') app.quit();
     });
   }
-}
 
-export default MainWindowService.startWindowService as startWindowService;
+  CreateWindowStateManager() {
+    this.windowState = windowStateManager({
+      defaultWidth: 800,
+      defaultHeight: 600,
+    });
+  }
+
+  getWindowConfig(): BrowserWindowConstructorOptions {
+    const config = defaultWindowConfig;
+    config.show = true;
+    config.x = this.windowState.x;
+    config.x = this.windowState.x;
+    config.width = this.windowState.width;
+    config.height = this.windowState.height;
+    return config;
+  }
+
+  ReadyToShow() {
+    this.window.once('ready-to-show', () => {
+      this.window.show();
+      this.window.focus();
+    });
+  }
+
+  RegisterClose() {
+    this.window.on('close', () => {
+      this.windowState.saveState(this.window);
+    });
+  }
+
+  Serve() {
+    if (dev) this.loadVite();
+    else this.serveURL(this.window);
+  }
+
+  serveURL = serve({ directory: '.' });
+
+  loadVite() {
+    this.window.loadURL(LOCALHOST).catch(e => {
+      setTimeout(() => {
+        this.loadVite();
+      }, 200);
+    });
+  }
+}

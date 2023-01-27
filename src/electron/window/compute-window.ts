@@ -1,9 +1,9 @@
 import { BrowserWindow } from 'electron';
 import path from 'path';
 
-export class WindowService {
+export class ComputeWindowService {
   getProcessWindow() {
-    const process = path.join(__dirname, '..', 'compute-preload', 'preload.cjs');
+    const process = path.join(__dirname, '..', 'preload', 'preload.cjs');
     return this.getWindow(false, process);
   }
 
@@ -11,7 +11,7 @@ export class WindowService {
     win.destroy();
   }
 
-  public static instance = new WindowService();
+  public static instance = new ComputeWindowService();
 
   getWindow(show: boolean, preload: string) {
     const win = new BrowserWindow({

@@ -1,5 +1,5 @@
-import type { AppRouter } from './router';
-import { ipcLink } from './link';
+import type { AppRouter } from '../../electron/router/renderer';
+import { ipcLink } from '../../electron/router/renderer';
 import { createTRPCClient } from '@trpc/client';
 
 const trpcClient = createTRPCClient<AppRouter>({

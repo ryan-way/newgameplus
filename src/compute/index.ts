@@ -1,4 +1,4 @@
-import trpcClient from '../trpc/client';
+import trpcClient from '../lib/service/client';
 import { logService } from '../lib/service';
 
 async function main() {

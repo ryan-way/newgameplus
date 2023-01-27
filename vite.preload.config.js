@@ -7,7 +7,7 @@ const config = {
     assetsDir: '.',
     minify: process.env.MODE !== 'development',
     lib: {
-      entry: 'src/electron/preload.ts',
+      entry: 'src/electron/window/preload.ts',
       formats: ['cjs'],
     },
     rollupOptions: {

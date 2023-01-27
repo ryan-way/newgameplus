@@ -1,6 +1,6 @@
 import type { TRPCLink, LinkRuntimeOptions } from '@trpc/client';
 import { transformRPCResponse, TRPCAbortError, TRPCClientError } from '@trpc/client';
-import type { AppRouter } from './index';
+import type { AppRouter } from './main';
 
 export function ipcLink(): TRPCLink<AppRouter> {
   return (runtime: LinkRuntimeOptions) => {

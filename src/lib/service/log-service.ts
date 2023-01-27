@@ -1,4 +1,4 @@
-import trpcClient from '../../trpc/client';
+import trpcClient from './client';
 
 export class LogService {
   public info(message: string) {

@@ -1,8 +1,8 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 
-import { CountDb } from '../db';
-import { Count } from '../models';
+import { CountDb } from '../../db';
+import { Count } from '../../models';
 
 const db = new CountDb();
 

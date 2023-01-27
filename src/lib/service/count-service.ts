@@ -1,5 +1,5 @@
 import { Count } from '../../models';
-import trpcClient from '../../trpc/client';
+import trpcClient from './client';
 
 export class CountService {
   public first(): Promise<Count> {

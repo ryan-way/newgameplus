@@ -1,7 +1,7 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 
-import logger from '../electron/logger';
+import logger from '../logger';
 
 const router = trpc
   .router()

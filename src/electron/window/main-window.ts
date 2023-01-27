@@ -6,7 +6,7 @@ import windowStateManager from 'electron-window-state';
 const port = process.env.PORT || 5173;
 const dev = app ? !app.isPackaged : false;
 
-export class WindowService {
+export class MainWindowService {
   private main;
   private windowState;
 
@@ -50,30 +50,30 @@ export class WindowService {
     return win;
   }
 
-  public static instance = new WindowService();
+  public static instance = new MainWindowService();
 
   public static startWindowService() {
     app.once('ready', () => {
-      WindowService.instance.windowState = windowStateManager({
+      MainWindowService.instance.windowState = windowStateManager({
         defaultWidth: 800,
         defaultHeight: 600,
       });
 
-      WindowService.instance.main = WindowService.instance.getWindow(
+      MainWindowService.instance.main = MainWindowService.instance.getWindow(
         true,
         path.join(__dirname, '..', 'preload', 'preload.cjs')
       );
-      WindowService.instance.main.once('ready-to-show', () => {
-        WindowService.instance.main.show();
-        WindowService.instance.main.focus();
+      MainWindowService.instance.main.once('ready-to-show', () => {
+        MainWindowService.instance.main.show();
+        MainWindowService.instance.main.focus();
       });
 
-      WindowService.instance.main.on('close', () => {
-        WindowService.instance.windowState.saveState(WindowService.instance.main);
+      MainWindowService.instance.main.on('close', () => {
+        MainWindowService.instance.windowState.saveState(MainWindowService.instance.main);
       });
 
-      if (dev) WindowService.instance.loadVite();
-      else WindowService.instance.serveURL(WindowService.instance.main);
+      if (dev) MainWindowService.instance.loadVite();
+      else MainWindowService.instance.serveURL(MainWindowService.instance.main);
     });
 
     app.on('window-all-closed', () => {
@@ -82,4 +82,4 @@ export class WindowService {
   }
 }
 
-export default WindowService.startWindowService as startWindowService;
+export default MainWindowService.startWindowService as startWindowService;

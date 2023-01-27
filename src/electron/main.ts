@@ -2,7 +2,7 @@ import contextMenu from 'electron-context-menu';
 import { ipcMain } from 'electron';
 import startWindowService from './window';
 
-import { router } from './../trpc';
+import { router } from './router/main';
 import { createIPCHandler } from 'electron-trpc';
 
 contextMenu({

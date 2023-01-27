@@ -1,9 +1,9 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 
-import { WindowService } from './window';
+import { ComputeWindowService } from '../window';
 
-const service = new WindowService();
+const service = new ComputeWindowService();
 let countRes = null;
 let count: number;
 async function getCount(): Promise<number> {

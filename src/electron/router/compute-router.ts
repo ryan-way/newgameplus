@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 import { ComputeWindow } from '../window';
 
+let job: 'count';
+
 let countRes = null;
 let count: number;
 async function getCount(): Promise<number> {
@@ -20,16 +22,22 @@ const router = trpc
   .query('count', {
     input: z.number(),
     async resolve({ input }) {
+      job = 'count';
+      count = input;
       const window = new ComputeWindow();
       window.Ready();
-      count = input;
       return await getCount().then(res => {
         window.destroy();
         return res;
       });
     },
   })
-  .query('get-count', {
+  .query('job', {
+    async resolve() {
+      return job;
+    },
+  })
+  .query('count-job', {
     async resolve() {
       return count;
     },

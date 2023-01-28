@@ -1,5 +1,6 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
+import logger from '../logger';
 
 import { ComputeWindow } from '../window';
 
@@ -22,12 +23,16 @@ const router = trpc
   .query('count', {
     input: z.number(),
     async resolve({ input }) {
+      logger.info('Processing count job...');
       job = 'count';
       count = input;
+      logger.info('Creating compute window...');
       const window = new ComputeWindow();
       window.Ready();
       return await getCount().then(res => {
+        logger.info('Count computed');
         window.destroy();
+        logger.info('Window destroyed; Job done');
         return res;
       });
     },

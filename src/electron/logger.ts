@@ -16,7 +16,7 @@ export class Logger {
     console.log(metric.dateTime, 'METRIC', metric.category, metric.params, metric.measurement);
   }
 
-  log(level: string, message: string) {
+  private log(level: string, message: string) {
     const entry: LogEntry = {
       session: Logger.session,
       dateTime: new Date(),

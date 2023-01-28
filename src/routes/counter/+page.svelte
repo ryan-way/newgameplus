@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Button from '$lib/components/button.svelte';
   import { countService, computeService, logService } from '$lib/service';
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
@@ -45,32 +46,12 @@
     </h1>
 
     <div>
-      <button
-        class="transition ease-in-out p-5 m-5 rounded-full bg-[#3c3836] hover:-translate-y-5 hover:bg-[#689d6a] text-center align-middle shadow-2xl"
-        data-testid="increment"
-        on:click={increment}
-        type="button"
-      >
-        Increment
-      </button>
+      <Button testid="increment" on:click={increment}>Increment</Button>
 
-      <button
-        class="transition ease-in-out p-5 m-5 rounded-full bg-[#3c3836] hover:-translate-y-5 hover:bg-[#689d6a] text-center align-middle shadow-2xl"
-        data-testid="decrement"
-        on:click={decrement}
-        type="button"
-      >
-        Decrement
-      </button>
+      <Button testid="decrement" on:click={decrement}>Decrement</Button>
     </div>
-    <button
-      class="transition ease-in-out p-5 m-5 rounded-full bg-[#3c3836] hover:-translate-y-5 hover:bg-[#689d6a] text-center align-middle shadow-2xl"
-      data-testid="reset"
-      on:click={reset}
-      type="button"
-    >
-      Reset
-    </button>
+
+    <Button testid="reset" on:click={reset}>Reset</Button>
   {/if}
 </main>
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Button from '$lib/components/button.svelte';
   let showSettings = true;
 
   enum Mode {
@@ -137,14 +138,9 @@
     </div>
   {/if}
 
-  <button
-    class="place-self-center transition ease-in-out p-5 m-5 max-w-fit rounded-full bg-[#3c3836] hover:-translate-y-5 hover:bg-[#689d6a] text-center align-middle shadow-2xl"
-    data-testid="reset"
-    on:click={toggle}
-    type="button"
-  >
+  <Button testid="reset" on:click={toggle}>
     {showSettings ? 'Start' : 'New Game'}
-  </button>
+  </Button>
 </main>
 
 <style></style>

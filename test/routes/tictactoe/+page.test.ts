@@ -2,10 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { render, RenderResult, fireEvent, act } from '@testing-library/svelte';
 import Index from '../../../src/routes/tictactoe/+page.svelte';
-import { writable } from 'svelte/store';
-import type { ITicTacToeStore } from '$lib/stores/tictactoe';
-import { getStore } from '$lib/stores/tictactoe';
-import type { Board, Winner } from '$lib/gamestate/tictactoe';
+import { computeService } from '$lib/service';
 
 const emptyBoard: Board = [
   [' ', ' ', ' '],
@@ -13,28 +10,20 @@ const emptyBoard: Board = [
   [' ', ' ', ' '],
 ];
 
-const board = writable(emptyBoard);
-const isGameOver = writable(false);
-const winner = writable(undefined as Winner);
-
-vi.mock('$lib/stores/tictactoe', () => {
-  const store: ITicTacToeStore = {
-    Play: vi.fn(),
-    Reset: vi.fn(),
-    getStores: vi.fn(() => {
-      return {
-        board: board,
-        winner: winner,
-        isGameOver: isGameOver,
-      };
-    }),
-    getComputerMove: vi.fn(),
+vi.mock('$lib/service', () => {
+  const computeService = {
+    count: vi.fn(x => Promise.resolve(x + 1)),
+    tictactoe: vi.fn(x => Promise.resolve(0)),
   };
 
+  const logService = {
+    info: vi.fn(),
+    error: vi.fn(),
+    metric: vi.fn(),
+  };
   return {
-    getStore: () => {
-      return store;
-    },
+    computeService,
+    logService,
   };
 });
 
@@ -44,7 +33,6 @@ describe.skip('Index', () => {
 
   beforeEach(() => {
     renderedComponent = render(Index);
-    store = getStore();
   });
 
   afterEach(() => {

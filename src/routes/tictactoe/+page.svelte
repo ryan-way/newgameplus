@@ -1,5 +1,7 @@
 <script lang="ts">
   import Button from '$lib/components/button.svelte';
+  import { computeService } from '$lib/service';
+
   let showSettings = true;
 
   enum Mode {
@@ -8,7 +10,11 @@
     CvC = 'CvC',
   }
 
-  let board = [
+  type Token = 'X' | 'O' | ' ';
+  type Row = [Token, Token, Token];
+  type Board = [Row, Row, Row];
+
+  let board: Board = [
     [' ', ' ', ' '],
     [' ', ' ', ' '],
     [' ', ' ', ' '],
@@ -18,7 +24,7 @@
 
   let first: boolean = true;
 
-  let token = 'X';
+  let token: Token = 'X';
 
   let computingMove = false;
 
@@ -69,7 +75,7 @@
   async function playComputerMove() {
     console.log('Playing Computer Move');
     computingMove = true;
-    let move = calcComputerMove();
+    let move = await computeService.tictactoe(board);
     await new Promise(res => setTimeout(res, 500));
     playMove(move);
     computingMove = false;
@@ -86,10 +92,6 @@
     playMove(row * 3 + cell);
 
     if (mode !== Mode.PvP && !gameOver()) playComputerMove();
-  }
-
-  function calcComputerMove() {
-    return board.flat().findIndex(x => x == ' ');
   }
 
   function resetBoard() {

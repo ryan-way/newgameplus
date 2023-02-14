@@ -69,7 +69,18 @@
   }
 
   function gameOver() {
-    return !board.flat().some(x => x === ' ');
+    return !board.flat().some(x => x === ' ') || gameWon();
+  }
+
+  function gameWon() {
+    return (
+      board.some(row => row.every(token => token === row[0]) && row[0] != ' ') ||
+      [0, 1, 2].some(
+        num => board.every(row => row[num] == board[0][num]) && board[0][num] != ' '
+      ) ||
+      (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ') ||
+      (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[1][1] != ' ')
+    );
   }
 
   async function playComputerMove() {
@@ -87,6 +98,7 @@
     if (mode === Mode.CvC) return;
     if (computingMove == true) return;
     if (board[row][cell] !== ' ') return;
+    if (gameOver()) return;
 
     console.log('Playing Human Move');
     playMove(row * 3 + cell);

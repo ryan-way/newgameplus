@@ -56,6 +56,32 @@ describe('TicTacToe Minimax Runner', () => {
 
   it('should recommend the best starting move', () => {
     const board: TicTacToeBoard = [
+      ['O', 'X', ' '],
+      [' ', 'X', ' '],
+      ['X', 'O', ' '],
+    ];
+    const depth = 10;
+
+    const runner = new TicTacToeMinimaxRunner(board, depth);
+
+    expect(runner.Run()).toBe(2);
+  });
+
+  it('should recommend the best starting move', () => {
+    const board: TicTacToeBoard = [
+      ['X', 'O', 'X'],
+      [' ', ' ', ' '],
+      [' ', ' ', 'O'],
+    ];
+    const depth = 10;
+
+    const runner = new TicTacToeMinimaxRunner(board, depth);
+
+    expect(runner.Run()).toBe(6);
+  });
+
+  it('should recommend the best starting move', () => {
+    const board: TicTacToeBoard = [
       [' ', ' ', ' '],
       [' ', ' ', ' '],
       [' ', ' ', ' '],

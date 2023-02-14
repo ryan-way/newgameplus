@@ -62,6 +62,6 @@ export class TicTacToeMinimaxState implements MinimaxState<TicTacToeMove> {
   }
 
   done(): boolean {
-    return this.score() != 0;
+    return this.score() != 0 || this.moveList.length == 9;
   }
 }

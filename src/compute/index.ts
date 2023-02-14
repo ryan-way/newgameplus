@@ -1,11 +1,6 @@
 import trpcClient from '../lib/service/client';
 import { logService } from '../lib/service';
-import {
-  SimpleTicTacToeBoardScorer,
-  TicTacToeBoard,
-  TicTacToeMinimaxRunner,
-  TicTacToeMinimaxState,
-} from './tictactoe';
+import { TicTacToeBoard, TicTacToeMinimaxRunner } from './tictactoe';
 
 async function dispatchCount() {
   let count: number = await trpcClient.query('compute-count-job');
